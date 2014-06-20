@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="AStarGazer" basedir=".">
+
+    <target name="clean">
+        <delete dir="bin" />
+        <delete dir="jar" />
+    </target>
+
+    <target name="compile">
+        <mkdir dir="bin" />
+        <javac srcdir="src" destdir="bin" />
+    </target>
+
+    <target name="run" depends="compile">
+        <java fork="true" classname="astargazer.Main">
+            <classpath>
+                <pathelement location="bin"/>
+            </classpath>
+        </java>
+    </target>
+
+    <target name="jar" depends="compile">
+        <mkdir dir="jar" />
+        <jar destfile="jar/AStarGazer.jar" basedir="bin">
+            <manifest>
+                <attribute name="Main-Class" value="astargazer.Main" />
+            </manifest>
+        </jar>
+    </target>
+
+</project>
