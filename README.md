@@ -35,6 +35,11 @@ Heuristics - Select which heuristic to use, meaning how should the distance
                 one block and east/west one block.
     Euclidean - This is normal distance calculated by the Pythagorean formula: 
                 d = sqrt((a_x-b_x)^2+(a_y-b_y)^2)
+    Euclidean Squared - This is the normal distance formula, but without 
+                taking the square root. Because the distance is only used to 
+                compare, comparing the squares of two values still works to 
+                determine which path is shorter. This heuristic is an 
+                optimized version of the Euclidean hueuristic.
 
 Neighbors - Select the method by which neighboring tiles are selected.
 

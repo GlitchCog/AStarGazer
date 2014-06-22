@@ -12,16 +12,16 @@ public class HeuristicSquared extends HeuristicScheme
     @Override
     public float distance(WeightedPoint one, WeightedPoint two)
     {
-    	float dx = one.getCol() - two.getCol(); 
-    	float dy = one.getRow() - two.getRow();
-    	
+        float dx = one.getCol() - two.getCol();
+        float dy = one.getRow() - two.getRow();
+
         return dx * dx + dy * dy;
     }
 
     @Override
     public String getLabel()
     {
-        return "Squared";
+        return "Eucledian Squared";
     }
 
 }
