@@ -21,6 +21,7 @@ import astargazer.map.MapGenerator;
 import astargazer.map.heuristic.HeuristicEuclidean;
 import astargazer.map.heuristic.HeuristicManhattan;
 import astargazer.map.heuristic.HeuristicScheme;
+import astargazer.map.heuristic.HeuristicSquared;
 import astargazer.map.neighbor.NeighborEightDirections;
 import astargazer.map.neighbor.NeighborFourDirections;
 import astargazer.map.neighbor.NeighborJumpPoint;
@@ -184,7 +185,7 @@ public class ToolboxPanel extends JPanel
             }
         };
 
-        dropdowns[0] = new Dropdown(DROPDOWN_TEXT_HEURISTICS, new HeuristicScheme[] {new HeuristicManhattan(), new HeuristicEuclidean()});
+        dropdowns[0] = new Dropdown(DROPDOWN_TEXT_HEURISTICS, new HeuristicScheme[] {new HeuristicManhattan(), new HeuristicEuclidean(), new HeuristicSquared()});
         dropdowns[1] = new Dropdown(DROPDOWN_TEXT_NEIGHBORS, new NeighborSelector[] {new NeighborFourDirections(), new NeighborEightDirections(), new NeighborJumpPoint()});
         dropdowns[2] = new Dropdown(DROPDOWN_TEXT_COLORS, ColorScheme.SCHEMES);
 
