@@ -21,7 +21,7 @@ public class HeuristicSquared extends HeuristicScheme
     @Override
     public String getLabel()
     {
-        return "Eucledian Squared";
+        return "Euclidian Squared";
     }
 
 }
