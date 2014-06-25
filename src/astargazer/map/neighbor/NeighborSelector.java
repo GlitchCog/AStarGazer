@@ -2,8 +2,8 @@ package astargazer.map.neighbor;
 
 import java.util.List;
 
-import astargazer.map.WeightedPoint;
 import astargazer.map.TileMap;
+import astargazer.map.WeightedPoint;
 import astargazer.map.heuristic.HeuristicScheme;
 
 /**
@@ -18,6 +18,7 @@ public abstract class NeighborSelector
      * 
      * @param map
      * @param cursor
+     * @param distanceCalculator
      * @return
      *         neighbors
      */

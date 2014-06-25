@@ -8,7 +8,6 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.event.MouseEvent;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -49,6 +48,11 @@ public class MapPanel extends JPanel implements MouseInputListener
      * The color scheme to use when drawing the tilemap
      */
     private ColorScheme colorScheme;
+
+    /**
+     * Whether to display the grid
+     */
+    private boolean displayGrid;
 
     /**
      * The stroke with which to draw the lines of the tilemap
@@ -119,6 +123,11 @@ public class MapPanel extends JPanel implements MouseInputListener
         this.colorScheme = colorScheme;
     }
 
+    public void setDisplayGrid(boolean displayGrid)
+    {
+        this.displayGrid = displayGrid;
+    }
+
     /**
      * Update the image of the tilemap
      */
@@ -162,7 +171,10 @@ public class MapPanel extends JPanel implements MouseInputListener
         int x = getXCoor();
         int y = getYCoor();
 
-        paintGrid(g, x, y);
+        if (displayGrid)
+        {
+            paintGrid(g, x, y);
+        }
 
         paintVisualization(g2d, x, y);
 
@@ -266,10 +278,7 @@ public class MapPanel extends JPanel implements MouseInputListener
                 }
                 if (!map.isTraversable(row, col))
                 {
-                    g.setColor(colorScheme.block);
-                    g.fillRect(x + col * tileWidth + getAxisLabelOffset() + 1, y + row * tileHeight + getAxisLabelOffset() + 1, tileWidth - 2, tileHeight - 2);
-                    g.setColor(colorScheme.blockBorder);
-                    g.drawRect(x + col * tileWidth + getAxisLabelOffset() + 1, y + row * tileHeight + getAxisLabelOffset() + 1, tileWidth - 2, tileHeight - 2);
+                    drawBlock(g, x, y, row, col);
                 }
             }
         }
@@ -346,6 +355,38 @@ public class MapPanel extends JPanel implements MouseInputListener
     }
 
     /**
+     * Draws a block with highlights and shadows
+     * 
+     * @param g
+     * @param x
+     * @param y
+     * @param row
+     * @param col
+     */
+    private void drawBlock(Graphics g, int x, int y, int row, int col)
+    {
+        int inset = 2;
+        int dx = x + col * tileWidth + getAxisLabelOffset() + inset;
+        int dy = y + row * tileHeight + getAxisLabelOffset() + inset;
+        int dw = tileWidth - inset * 2;
+        int dh = tileHeight - inset * 2;
+        g.setColor(colorScheme.block);
+        g.fillRect(dx, dy, dw, dh);
+
+        g.setColor(colorScheme.blockShadow);
+        for (int i = 0; i < Math.max(tileHeight / 6, 1); i++)
+            g.drawLine(dx, dy + dh - i, dx + dw - 1 - i, dy + dh - i);
+        for (int i = 0; i < Math.max(tileWidth / 6, 1); i++)
+            g.drawLine(dx + dw - i, dy, dx + dw - i, dy + dh - 1 - i);
+
+        g.setColor(colorScheme.blockHighlight);
+        for (int i = 0; i < Math.max(tileHeight / 6, 1); i++)
+            g.drawLine(dx, dy + i, dx + dw - 1 - i, dy + i);
+        for (int i = 0; i < Math.max(tileWidth / 6, 1); i++)
+            g.drawLine(dx + i, dy, dx + i, dy + dh - 1 - i);
+    }
+
+    /**
      * Fill the specified tile
      * 
      * @param g2d
@@ -357,10 +398,15 @@ public class MapPanel extends JPanel implements MouseInputListener
      */
     private void fillTile(Graphics2D g2d, WeightedPoint point, Color fill, Color border, int x, int y)
     {
+        int dx = x + getAxisLabelOffset() + point.getCol() * tileWidth + 4;
+        int dy = y + getAxisLabelOffset() + point.getRow() * tileHeight + 4;
+        int dw = tileWidth - 9;
+        int dh = tileHeight - 9;
         g2d.setColor(fill);
-        g2d.fillRect(x + getAxisLabelOffset() + point.getCol() * tileWidth + 4, y + getAxisLabelOffset() + point.getRow() * tileHeight + 4, tileWidth - 9, tileHeight - 9);
+        g2d.fillRect(dx, dy, dw, dh);
         g2d.setColor(border);
-        g2d.drawRect(x + getAxisLabelOffset() + point.getCol() * tileWidth + 4, y + getAxisLabelOffset() + point.getRow() * tileHeight + 4, tileWidth - 9, tileHeight - 9);
+        g2d.drawLine(dx, dy + dh, dx + dw, dy + dh);
+        g2d.drawLine(dx + dw, dy, dx + dw, dy + dh);
     }
 
     public void mouseClicked(MouseEvent e)

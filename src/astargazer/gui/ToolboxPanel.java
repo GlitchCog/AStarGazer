@@ -59,6 +59,7 @@ public class ToolboxPanel extends JPanel
     private final String CHECKBOX_TEXT_OBSTACLES = "Generate Obstacles";
     private final String CHECKBOX_TEXT_DIJKSTRA = "Full Dijkstra Search (h=0)";
     private final String CHECKBOX_TEXT_RANDOMIZE = "Randomize Equicost Nodes";
+    private final String CHECKBOX_TEXT_GRID = "Show Grid";
 
     /**
      * Timer to increment the steps in the algorithm
@@ -241,12 +242,19 @@ public class ToolboxPanel extends JPanel
                 {
                     pf.setShuffle(cb.isSelected());
                 }
+                else if (CHECKBOX_TEXT_GRID.equals(cb.getText()))
+                {
+                    mp.setDisplayGrid(cb.isSelected());
+                    mp.updateDrawing();
+                }
             }
         };
 
         checkboxPanel = new CheckboxPanel(new String[] {CHECKBOX_TEXT_OBSTACLES, 
                                                         CHECKBOX_TEXT_DIJKSTRA, 
-                                                        CHECKBOX_TEXT_RANDOMIZE}, il);
+                                                        CHECKBOX_TEXT_RANDOMIZE, 
+                                                        CHECKBOX_TEXT_GRID}, 
+                                                        il);
 
         infoPanel = new InfoPanel(pf);
 
