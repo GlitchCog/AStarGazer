@@ -18,6 +18,7 @@ import javax.swing.event.ChangeListener;
 import astargazer.PathFinder;
 import astargazer.StatusEnum;
 import astargazer.map.MapGenerator;
+import astargazer.map.heuristic.HeuristicChebyshev;
 import astargazer.map.heuristic.HeuristicEuclidean;
 import astargazer.map.heuristic.HeuristicManhattan;
 import astargazer.map.heuristic.HeuristicScheme;
@@ -186,7 +187,7 @@ public class ToolboxPanel extends JPanel
             }
         };
 
-        dropdowns[0] = new Dropdown(DROPDOWN_TEXT_HEURISTICS, new HeuristicScheme[] {new HeuristicManhattan(), new HeuristicEuclidean(), new HeuristicSquared()});
+        dropdowns[0] = new Dropdown(DROPDOWN_TEXT_HEURISTICS, new HeuristicScheme[] {new HeuristicManhattan(), new HeuristicChebyshev(), new HeuristicEuclidean(), new HeuristicSquared()});
         dropdowns[1] = new Dropdown(DROPDOWN_TEXT_NEIGHBORS, new NeighborSelector[] {new NeighborFourDirections(), new NeighborEightDirections(), new NeighborJumpPoint()});
         dropdowns[2] = new Dropdown(DROPDOWN_TEXT_COLORS, ColorScheme.SCHEMES);
 
