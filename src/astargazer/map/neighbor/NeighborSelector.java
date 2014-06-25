@@ -4,6 +4,7 @@ import java.util.List;
 
 import astargazer.map.WeightedPoint;
 import astargazer.map.TileMap;
+import astargazer.map.heuristic.HeuristicScheme;
 
 /**
  * Selects the group of neighboring points to be considered in the next step of the algorithm
@@ -20,7 +21,7 @@ public abstract class NeighborSelector
      * @return
      *         neighbors
      */
-    public abstract List<WeightedPoint> getNeighbors(TileMap map, WeightedPoint cursor);
+    public abstract List<WeightedPoint> getNeighbors(TileMap map, WeightedPoint cursor, HeuristicScheme distanceCalculator);
 
     /**
      * Get the label

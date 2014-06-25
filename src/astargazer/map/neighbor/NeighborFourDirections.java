@@ -5,6 +5,7 @@ import java.util.List;
 
 import astargazer.map.WeightedPoint;
 import astargazer.map.TileMap;
+import astargazer.map.heuristic.HeuristicScheme;
 
 /**
  * Neighbor selector that returns adjacent tiles excluding diagonal moves: N, S, E, W
@@ -14,7 +15,7 @@ import astargazer.map.TileMap;
 public class NeighborFourDirections extends NeighborSelector
 {
     @Override
-    public List<WeightedPoint> getNeighbors(TileMap map, WeightedPoint cursor)
+    public List<WeightedPoint> getNeighbors(TileMap map, WeightedPoint cursor, HeuristicScheme distanceCalculator)
     {
         List<WeightedPoint> neighbors = new ArrayList<WeightedPoint>();
 

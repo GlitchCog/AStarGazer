@@ -279,7 +279,7 @@ public class PathFinder
         closedSet.add(cursor);
 
         // Get the list of neighboring points
-        List<WeightedPoint> neighbors = neighborSelector.getNeighbors(map, cursor);
+        List<WeightedPoint> neighbors = neighborSelector.getNeighbors(map, cursor, heuristic);
 
         // Link the neighbors to the cursor (for backtracking the path when the goal is reached) and calculate their weight
         for (WeightedPoint wp : neighbors)
