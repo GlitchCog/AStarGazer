@@ -31,8 +31,25 @@ public abstract class NeighborSelector
      */
     public abstract String getLabel();
 
+    /**
+     * Get an HTML formatted String explaining the neighbor selector
+     * 
+     * @return explanation
+     */
+    public abstract String getExplanation();
+
     public String toString()
     {
         return getLabel();
+    }
+
+    /**
+     * Get all the neighbor selectors that extend this base abstract class
+     * 
+     * @return neighborSelectors
+     */
+    public static NeighborSelector[] getAllNeighborSelectors()
+    {
+        return new NeighborSelector[] {new NeighborFourDirections(), new NeighborEightDirections(), new NeighborJumpPoint()};
     }
 }

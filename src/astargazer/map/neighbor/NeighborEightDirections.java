@@ -44,4 +44,15 @@ public class NeighborEightDirections extends NeighborSelector
     {
         return "8-Directional";
     }
+
+    @Override
+    public String getExplanation()
+    {
+        return "Neighbors are selected from diagonally adjacent tiles in " + 
+               "addition to the north, east, south, and west directions. " + 
+               "This works best with the Euclidean heuristic. Combining " + 
+               "this neighbor selection scheme with the Manhattan " + 
+               "heuristic can yield strange results because a diagonal " + 
+               "path over a single tile is counted as a distance of 2.";
+    }
 }

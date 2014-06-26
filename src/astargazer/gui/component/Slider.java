@@ -1,4 +1,4 @@
-package astargazer.gui;
+package astargazer.gui.component;
 
 import javax.swing.JSlider;
 

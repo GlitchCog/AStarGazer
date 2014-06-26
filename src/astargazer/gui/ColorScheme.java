@@ -13,7 +13,7 @@ public class ColorScheme
                                                                      Color.WHITE,                  // background
                                                                      Color.LIGHT_GRAY,             // blockHighlight
                                                                      Color.GRAY,                   // block
-                                                                     Color.DARK_GRAY,             // blockShadow
+                                                                     Color.DARK_GRAY,              // blockShadow
                                                                      Color.RED,                    // cursor
                                                                      Color.CYAN.darker().darker(), // open
                                                                      Color.CYAN.darker(),          // openBorder

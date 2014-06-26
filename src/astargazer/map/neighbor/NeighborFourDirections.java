@@ -45,4 +45,10 @@ public class NeighborFourDirections extends NeighborSelector
     {
         return "4-directional";
     }
+
+    @Override
+    public String getExplanation()
+    {
+        return "Neighbors are selected from the traversable tiles to the north, east, south, and west only. This works best with the Manhattan heuristic.";
+    }
 }

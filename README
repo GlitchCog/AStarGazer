@@ -1,7 +1,7 @@
 AStarGazer
 ==========
 
-AStarGazer is a program for visualizing the A* search algorithm on a Tile Map.
+AStarGazer is a program for visualizing the A* search algorithm on a tile map.
 
 The A* search algorithm (en.wikipedia.org/wiki/A_Star_Search_Algorithm) is 
 used to traverse a connection of nodes, called a graph. This implementation 
@@ -26,9 +26,9 @@ Generate - Generates a new random map and start and goal points.
 Heuristics - Select which heuristic to use, meaning how should the distance 
              between two points be evaluated in the algorithm.
 
-    Manhattan - Manhattan (or Taxicab) distance only permits travelling along 
+    Manhattan - Manhattan (or Taxicab) distance only permits traveling along 
                 the x and y axes, so the distance between (0, 0) and (1, 1) is 
-                2 from travelling along the X axis 1 unit and then up the Y 
+                2 from traveling along the X axis 1 unit and then up the Y 
                 axis 1 unit, and not the hypotenuse, which would be sqrt(2)/2. 
                 It's so named because in a city you're bound to the streets. 
                 You can't cut diagonally through a building to go north/south 
@@ -109,7 +109,7 @@ Randomize Equicost Nodes - Selecting this option will shuffle the neighboring
                      axis. You could travel only in the Y direction until you 
                      were at the correct row, and then travel only in the X 
                      direction until you reach your destination. Alternatively 
-                     you could zigzag with every step. The distance travelled 
+                     you could zigzag with every step. The distance traveled 
                      is the same in both cases. This means that there are lots 
                      of equidistant paths to decide between when using a 
                      Manhattan heuristic. The decision to try one direction 
@@ -120,3 +120,4 @@ Randomize Equicost Nodes - Selecting this option will shuffle the neighboring
                      direction simply because tiles in that direction are 
                      added to the set before tiles in another direction.
 
+Show Grid - This option determines whether to display the tile grid on the map

@@ -25,8 +25,25 @@ public abstract class HeuristicScheme
      */
     public abstract String getLabel();
 
+    /**
+     * Get a String explaining the heuristic
+     * 
+     * @return explanation
+     */
+    public abstract String getExplanation();
+
     public String toString()
     {
         return getLabel();
+    }
+
+    /**
+     * Get all the heuristic schemes that extend this base abstract class
+     * 
+     * @return heuristicSchemes
+     */
+    public static HeuristicScheme[] getAllHeuristics()
+    {
+        return new HeuristicScheme[] {new HeuristicManhattan(), new HeuristicChebyshev(), new HeuristicEuclidean(), new HeuristicSquared()};
     }
 }

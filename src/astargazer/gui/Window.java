@@ -18,6 +18,10 @@ import astargazer.map.TileMap;
  */
 public class Window extends JFrame
 {
+    private HelpPopup helpPopup;
+
+    private ToolboxPanel sidePanel;
+
     /**
      * The panel that displays the tilemap and the algorithm visualizations
      */
@@ -36,6 +40,7 @@ public class Window extends JFrame
         TileMap map = MapGenerator.getInstance().generate(false);
 
         this.pf = new PathFinder(map);
+
         buildGui();
     }
 
@@ -47,18 +52,20 @@ public class Window extends JFrame
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setTitle("A* Gazer");
 
+        helpPopup = new HelpPopup(this);
+
         JPanel everything = new JPanel(new GridBagLayout());
 
         GridBagConstraints gbc = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0);
 
         mapPanel = new MapPanel(pf);
-        JPanel sidepanel = new ToolboxPanel(mapPanel, pf);
+        sidePanel = new ToolboxPanel(mapPanel, pf);
 
         gbc.weighty = 0.0f;
         gbc.anchor = GridBagConstraints.WEST;
         gbc.fill = GridBagConstraints.VERTICAL;
         gbc.gridx = 0;
-        everything.add(sidepanel, gbc);
+        everything.add(sidePanel, gbc);
 
         gbc.anchor = GridBagConstraints.EAST;
         gbc.fill = GridBagConstraints.BOTH;
@@ -74,7 +81,18 @@ public class Window extends JFrame
 
         setSize(1024, 768);
 
+        setJMenuBar(new Menu(this));
+
         setVisible(true);
     }
 
+    public void showInformation()
+    {
+        helpPopup.setVisible(true);
+    }
+
+    public void showAbout()
+    {
+        helpPopup.showAbout(this);
+    }
 }

@@ -60,4 +60,14 @@ public class NeighborJumpPoint extends NeighborSelector
     {
         return "Jump Point";
     }
+
+    @Override
+    public String getExplanation()
+    {
+        return "Neighbors are selected by extending rays out from the " + 
+               "current tile until an obstacle or the goal is hit. These " + 
+               "tiles are \"neighbors\" in the sense that they are to be " + 
+               "used in the next step of the algorithm, but are not " + 
+               "necessarily adjacent.";
+    }
 }

@@ -1,4 +1,4 @@
-package astargazer.gui;
+package astargazer.gui.component;
 
 import java.awt.Font;
 import java.awt.GridBagConstraints;

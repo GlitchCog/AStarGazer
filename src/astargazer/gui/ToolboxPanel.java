@@ -17,15 +17,15 @@ import javax.swing.event.ChangeListener;
 
 import astargazer.PathFinder;
 import astargazer.StatusEnum;
+import astargazer.gui.component.ButtonPanel;
+import astargazer.gui.component.CheckboxPanel;
+import astargazer.gui.component.Dropdown;
+import astargazer.gui.component.DropdownPanel;
+import astargazer.gui.component.InfoPanel;
+import astargazer.gui.component.Slider;
+import astargazer.gui.component.SliderPanel;
 import astargazer.map.MapGenerator;
-import astargazer.map.heuristic.HeuristicChebyshev;
-import astargazer.map.heuristic.HeuristicEuclidean;
-import astargazer.map.heuristic.HeuristicManhattan;
 import astargazer.map.heuristic.HeuristicScheme;
-import astargazer.map.heuristic.HeuristicSquared;
-import astargazer.map.neighbor.NeighborEightDirections;
-import astargazer.map.neighbor.NeighborFourDirections;
-import astargazer.map.neighbor.NeighborJumpPoint;
 import astargazer.map.neighbor.NeighborSelector;
 
 /**
@@ -115,6 +115,7 @@ public class ToolboxPanel extends JPanel
         GridBagConstraints gbc = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(12, 12, 12, 12), 0, 0);
 
         ActionListener al = new ActionListener() {
+            @Override
             public void actionPerformed( ActionEvent e )
             {
                 if (BUTTON_TEXT_GENERATE.equals( ((JButton)e.getSource()).getText()) )
@@ -187,8 +188,8 @@ public class ToolboxPanel extends JPanel
             }
         };
 
-        dropdowns[0] = new Dropdown(DROPDOWN_TEXT_HEURISTICS, new HeuristicScheme[] {new HeuristicManhattan(), new HeuristicChebyshev(), new HeuristicEuclidean(), new HeuristicSquared()});
-        dropdowns[1] = new Dropdown(DROPDOWN_TEXT_NEIGHBORS, new NeighborSelector[] {new NeighborFourDirections(), new NeighborEightDirections(), new NeighborJumpPoint()});
+        dropdowns[0] = new Dropdown(DROPDOWN_TEXT_HEURISTICS, HeuristicScheme.getAllHeuristics() );
+        dropdowns[1] = new Dropdown(DROPDOWN_TEXT_NEIGHBORS, NeighborSelector.getAllNeighborSelectors() );
         dropdowns[2] = new Dropdown(DROPDOWN_TEXT_COLORS, ColorScheme.SCHEMES);
 
         dropdownPanel = new DropdownPanel(dropdowns, dal);
