@@ -40,7 +40,7 @@ public class HelpPopup extends JDialog
 
     public HelpPopup(Window window)
     {
-        super(window, "AStarGazer Information", true);
+        super(window, "A* Gazer Information", true);
 
         constructAboutPopup();
 
