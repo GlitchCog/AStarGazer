@@ -11,6 +11,35 @@ also displays the inner workings of the algorithm by coloring the open and
 closed sets of nodes on the map and drawing a line representing the current 
 path being investigated.
 
+Open set - The collection of nodes that have yet to be investigated
+
+Closed set - The collection of nodes that have already been investigated
+
+Heuristic - The method for calculating the cost of a node
+
+Neighbor Selection - The method for determining which nodes can be reached from 
+the current node
+
+With each step, neighboring nodes are selected for analysis. If a neighbor is 
+considered a valid move, its cost is calculated. The cost (f) is the sum of two 
+parts: 
+
+1) the cost already spent to get to the current node (g), which is the current 
+location's cost plus whatever incremental cost is required to get to the 
+neighboring node; and
+2) the estimated cost (h) to get to the goal.
+
+All these neighbors are added to the open set, which is the collection of nodes 
+to be investigated, and the current location is added to the closed set, as it 
+has already been analyzed. From all the points stored on the open set, the one 
+with the lowest cost is investigated next.  The A* search algorithm can be used 
+to search through graphs that are not representations of physical space. A 
+common example is the sliding number puzzle where 8 or 15 numbers are stored in 
+a square grid. The numbers can be moved using the single empty spot, and each 
+arrangement of puzzle pieces can be considered a node in the graph with an 
+associated heuristic of the number of moves taken so far added to the estimated 
+distance the numbers are from their ordered locations. 
+
 Usage Instructions:
 
 Step - Moves the algorithm forward one step. A step is defined as popping the 
