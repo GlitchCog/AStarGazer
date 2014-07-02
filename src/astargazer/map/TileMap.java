@@ -25,6 +25,11 @@ public class TileMap
     private WeightedPoint goal;
 
     /**
+     * Whether the start and goal points are swapped
+     */
+    private static boolean endPointSwap = false;
+
+    /**
      * Construct a TileMap with the specified boolean map of TRUE non-traversable tiles
      * 
      * @param map
@@ -60,7 +65,7 @@ public class TileMap
      */
     public WeightedPoint getStart()
     {
-        return start;
+        return TileMap.endPointSwap ? goal : start;
     }
 
     /**
@@ -80,7 +85,7 @@ public class TileMap
      */
     public WeightedPoint getGoal()
     {
-        return goal;
+        return TileMap.endPointSwap ? start : goal;
     }
 
     /**
@@ -91,6 +96,16 @@ public class TileMap
     public void setGoal(WeightedPoint goal)
     {
         this.goal = goal;
+    }
+
+    /**
+     * Set whether the end points should be swapped
+     * 
+     * @param endPointSwap
+     */
+    public static void setEndPointSwap(boolean endPointSwap)
+    {
+        TileMap.endPointSwap = endPointSwap;
     }
 
     /**

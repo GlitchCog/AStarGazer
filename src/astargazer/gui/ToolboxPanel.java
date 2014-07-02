@@ -25,6 +25,7 @@ import astargazer.gui.component.InfoPanel;
 import astargazer.gui.component.Slider;
 import astargazer.gui.component.SliderPanel;
 import astargazer.map.MapGenerator;
+import astargazer.map.TileMap;
 import astargazer.map.heuristic.HeuristicScheme;
 import astargazer.map.neighbor.NeighborSelector;
 
@@ -61,6 +62,7 @@ public class ToolboxPanel extends JPanel
     private final String CHECKBOX_TEXT_DIJKSTRA = "Full Dijkstra Search (h=0)";
     private final String CHECKBOX_TEXT_RANDOMIZE = "Randomize Equicost Nodes";
     private final String CHECKBOX_TEXT_GRID = "Show Grid";
+    private final String CHECKBOX_TEXT_SWAP = "Swap Start and Goal Points";
 
     /**
      * Timer to increment the steps in the algorithm
@@ -249,13 +251,19 @@ public class ToolboxPanel extends JPanel
                     mp.setDisplayGrid(cb.isSelected());
                     mp.updateDrawing();
                 }
+                else if (CHECKBOX_TEXT_SWAP.equals(cb.getText()))
+                {
+                    TileMap.setEndPointSwap(cb.isSelected());
+                    mp.updateDrawing();
+                }
             }
         };
 
         checkboxPanel = new CheckboxPanel(new String[] {CHECKBOX_TEXT_OBSTACLES, 
                                                         CHECKBOX_TEXT_DIJKSTRA, 
                                                         CHECKBOX_TEXT_RANDOMIZE, 
-                                                        CHECKBOX_TEXT_GRID}, 
+                                                        CHECKBOX_TEXT_GRID, 
+                                                        CHECKBOX_TEXT_SWAP}, 
                                                         il);
 
         infoPanel = new InfoPanel(pf);
