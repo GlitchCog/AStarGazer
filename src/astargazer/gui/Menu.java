@@ -13,8 +13,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 
 public class Menu extends JMenuBar
 {
@@ -23,26 +21,17 @@ public class Menu extends JMenuBar
     private static final String[] MAIN_MENU_ITEMS = {"File", "Help"};
     private static final int[] MAIN_MNOMONICS = {KeyEvent.VK_F, KeyEvent.VK_H};
 
+    private static final String MENU_SEED = "Seed Map Generator";
     private static final String MENU_EXIT = "Exit";
     private static final String MENU_INFO = "Information";
     private static final String MENU_ABOUT = "About";
 
     private static final MenuComponents[][] MENU_OPTIONS = 
     {
-        { new MenuComponents(MENU_EXIT,  KeyEvent.VK_X, KeyStroke.getKeyStroke(KeyEvent.VK_Q, Event.CTRL_MASK)) }, 
+        { new MenuComponents(MENU_SEED,  KeyEvent.VK_S, KeyStroke.getKeyStroke(KeyEvent.VK_S, Event.CTRL_MASK)), 
+          new MenuComponents(MENU_EXIT,  KeyEvent.VK_X, KeyStroke.getKeyStroke(KeyEvent.VK_Q, Event.CTRL_MASK)) }, 
         { new MenuComponents(MENU_INFO,  KeyEvent.VK_I, null),
           new MenuComponents(MENU_ABOUT, KeyEvent.VK_A, null) 
-        }
-    };
-
-    protected MenuListener ml = new MenuListener()
-    {
-        public void menuCanceled(MenuEvent e) {}
-        public void menuDeselected(MenuEvent e) {}
-        public void menuSelected(MenuEvent e)
-        {
-            // In case just the main menu (File, Help) were clicked, halt the playing
-            // haltAnimation();
         }
     };
 
@@ -64,7 +53,11 @@ public class Menu extends JMenuBar
     {
         public void actionPerformed(ActionEvent e)
         {
-            if (MENU_EXIT.equals( ((JMenuItem)e.getSource()).getText() ))
+            if (MENU_SEED.equals( ((JMenuItem)e.getSource()).getText() ))
+            {
+                window.showSeedInput();
+            }
+            else if (MENU_EXIT.equals( ((JMenuItem)e.getSource()).getText() ))
             {
                 System.exit(0);
             }
@@ -95,7 +88,6 @@ public class Menu extends JMenuBar
         for (int i = 0; i < MAIN_MENU_ITEMS.length; i++)
         {
             menus[i] = new JMenu(MAIN_MENU_ITEMS[i]);
-            menus[i].addMenuListener(ml);
             menus[i].setMnemonic(MAIN_MNOMONICS[i]);
             for (int j = 0; j < MENU_OPTIONS[i].length; j++)
             {

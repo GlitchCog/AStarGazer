@@ -235,8 +235,6 @@ public class ToolboxPanel extends JPanel
                 {
                     MapGenerator.getInstance().setObstacles(cb.isSelected());
                     regenerateMap(false);
-                    mp.updateDrawing();
-                    infoPanel.updateStats(pf);
                 }
                 else if (CHECKBOX_TEXT_DIJKSTRA.equals(cb.getText()))
                 {
@@ -302,6 +300,20 @@ public class ToolboxPanel extends JPanel
     private void regenerateMap(boolean reseed)
     {
         pf.reset(MapGenerator.getInstance().generate(reseed));
+        mp.updateDrawing();
+        infoPanel.updateStats(pf);
+    }
+
+    /**
+     * Randomly generate a tilemap using the specified random number generator seed
+     * 
+     * @param seed
+     */
+    public void regenerateMap(int seed)
+    {
+        pf.reset(MapGenerator.getInstance().generate(seed));
+        mp.updateDrawing();
+        infoPanel.updateStats(pf);
     }
 
 }

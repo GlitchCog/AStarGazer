@@ -67,6 +67,7 @@ public class InfoPanel extends JPanel
         }
 
         String text = "<html><pre>";
+        text += "Map Seed: " + pf.getSeed() + "<br>";
         text += WeightedPoint.toLabeledString("Start", pf.getStart()) + "<br>";
         text += WeightedPoint.toLabeledString("Goal", pf.getGoal()) + "<br>";
         text += WeightedPoint.toLabeledString("Cursor", pf.getCursor()) + "<br>";

@@ -25,6 +25,11 @@ public class TileMap
     private WeightedPoint goal;
 
     /**
+     * The seed used on the random number generator to build this map
+     */
+    private final int seed;
+
+    /**
      * Whether the start and goal points are swapped
      */
     private static boolean endPointSwap = false;
@@ -34,11 +39,12 @@ public class TileMap
      * 
      * @param map
      */
-    public TileMap(boolean[][] map, WeightedPoint start, WeightedPoint goal)
+    public TileMap(boolean[][] map, WeightedPoint start, WeightedPoint goal, int seed)
     {
         this.map = map;
         this.start = start;
         this.goal = goal;
+        this.seed = seed;
     }
 
     /**
@@ -46,8 +52,9 @@ public class TileMap
      * 
      * @param imap
      */
-    public TileMap(int[][] imap)
+    public TileMap(int[][] imap, int seed)
     {
+        this.seed = seed;
         map = new boolean[imap.length][imap[0].length];
         for (int r = 0; r < imap.length; r++)
         {
@@ -69,16 +76,6 @@ public class TileMap
     }
 
     /**
-     * Set the starting point for this tile map
-     * 
-     * @param start
-     */
-    public void setStart(WeightedPoint start)
-    {
-        this.start = start;
-    }
-
-    /**
      * Get the goal point for this tile map
      * 
      * @return goal
@@ -89,13 +86,13 @@ public class TileMap
     }
 
     /**
-     * Set the goal point for this tile map
+     * Get the seed used on the random number generator to build this map
      * 
-     * @param goal
+     * @return seed
      */
-    public void setGoal(WeightedPoint goal)
+    public final int getSeed()
     {
-        this.goal = goal;
+        return seed;
     }
 
     /**

@@ -9,7 +9,7 @@ import java.util.Random;
  */
 public class MapGenerator
 {
-    private int mapSeed = new Random().nextInt();
+    private int mapSeed = new Random().nextInt(10000);
 
     private static final int MIN_HEIGHT = 30;
     private static final int MAX_HEIGHT = 40;
@@ -73,7 +73,20 @@ public class MapGenerator
             mapSeed++;
         }
 
-        rnd = new Random(mapSeed);
+        return generate(mapSeed);
+    }
+
+    /**
+     * Generate a random TileMap
+     * 
+     * @param seed The random number generator seed to use
+     * @return
+     *         new TileMap
+     */
+    public TileMap generate(int seed)
+    {
+        rnd = new Random(seed);
+        this.mapSeed = seed;
 
         boolean[][] map = new boolean[rnd.nextInt(MAX_HEIGHT - MIN_HEIGHT) + MIN_HEIGHT][rnd.nextInt(MAX_WIDTH - MIN_WIDTH) + MIN_WIDTH];
 
@@ -90,21 +103,51 @@ public class MapGenerator
             map[map.length - 1][c] = true; // bottom
         }
 
-        // Generate 20 random blocks on the map
-        int x, y, w, h;
-        for (int i = 0; i < 10; i++)
+        WeightedPoint start = generatePoint(map);
+        WeightedPoint goal = generatePoint(map);
+
+        // Generate random blocks on the map
+        if (obstacles)
         {
-            // Generate these values whether they're used or not to keep the seed consistent 
-            // for the start and goals whether there are obstacles or not 
-            x = 10 + rnd.nextInt(Math.max(1, map.length - 11));
-            y = rnd.nextInt(Math.max(1,10 + map[0].length - 11));
-            w = 2 + rnd.nextInt(15);
-            h = 2 + rnd.nextInt(15);
-            if (obstacles)
-                insertBlock(map, x, y, w, h);
+            int r, c, w, h;
+            final int blockCount = Math.max(1, (map.length * map[0].length) / 100);
+            for (int i = 0; i < blockCount; i++)
+            {
+                // Generate these values whether they're used or not to keep the seed consistent 
+                // for the start and goals whether there are obstacles or not 
+                r = rnd.nextInt(Math.max(1, map.length));
+                c = rnd.nextInt(Math.max(1, map[0].length));
+                w = 2 + rnd.nextInt(15);
+                h = 2 + rnd.nextInt(15);
+
+                // Ensure that this block does not cover the start or goal points
+                boolean coveringStart = isCoveringPoint(start, r, c, w, h);
+                boolean coveringGoal = isCoveringPoint(goal, r, c, w, h);
+                if (!coveringStart && !coveringGoal)
+                {
+                    insertBlock(map, r, c, w, h);
+                }
+            }
         }
 
-        return new TileMap(map, generatePoint(map), generatePoint(map));
+        return new TileMap(map, start, goal, seed);
+    }
+
+    /**
+     * Determines whether a block specified by center point (x, y) of width w and height h will cover the specified point p
+     * 
+     * @param p point to be tested against
+     * @param r center row of the block
+     * @param c center column of the block
+     * @param w width of the block
+     * @param h height of the block
+     * @return whether the point is covered
+     */
+    private boolean isCoveringPoint(WeightedPoint p, int r, int c, int w, int h)
+    {
+        return c - (w / 2) <= p.getCol() && p.getCol() < c + (w / 2) && 
+               r - (h / 2) <= p.getRow() && p.getRow() < r + (h / 2);
+
     }
 
     /**
@@ -135,19 +178,9 @@ public class MapGenerator
      */
     private WeightedPoint generatePoint(boolean[][] map)
     {
-        int attempts = 0;
-        int r, c;
-        do
-        {
-            r = rnd.nextInt(map.length - 2) + 1;
-            c = rnd.nextInt(map[0].length - 2) + 1;
-            attempts++;
-        } while (map[r][c] && attempts < 1000);
-        if (attempts == 1000)
-        {
-            // Gave up, so just set the point to traversable, maybe it's on the edge of a block
-            map[r][c] = false;
-        }
+        int r = rnd.nextInt(map.length - 2) + 1;
+        int c = rnd.nextInt(map[0].length - 2) + 1;
+        map[r][c] = false;
         return new WeightedPoint(r, c);
     }
 

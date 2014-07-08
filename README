@@ -150,3 +150,11 @@ Randomize Equicost Nodes - Selecting this option will shuffle the neighboring
                      added to the set before tiles in another direction.
 
 Show Grid - This option determines whether to display the tile grid on the map
+
+Seed Map Generator - Selecting this option from the File menu will permit you 
+                     to specify a seed value for the random number generator 
+                     that builds the tile maps. You can enter an integer to use 
+                     or a unique integer can be generated using text you enter. 
+                     Seeds are your keys to revisiting maps as each key will 
+                     regenerate the same unique map each time it is used as the 
+                     seed.

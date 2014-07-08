@@ -1,10 +1,12 @@
 package astargazer.gui;
 
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import astargazer.PathFinder;
@@ -59,6 +61,7 @@ public class Window extends JFrame
         GridBagConstraints gbc = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0);
 
         mapPanel = new MapPanel(pf);
+
         sidePanel = new ToolboxPanel(mapPanel, pf);
 
         gbc.weighty = 0.0f;
@@ -76,14 +79,33 @@ public class Window extends JFrame
 
         add(everything);
 
-        pack();
-        setMinimumSize(getSize());
-
-        setSize(1024, 768);
+        setMinimumSize(new Dimension(800, 800));
+        setSize(1024, 800);
 
         setJMenuBar(new Menu(this));
 
         setVisible(true);
+    }
+
+    /**
+     * Display the popup to input a new seed value
+     */
+    public void showSeedInput()
+    {
+        String seedStr = JOptionPane.showInputDialog(this, "Map Seed: ", pf.getSeed());
+        int seed;
+        if (seedStr != null)
+        {
+            try
+            {
+                seed = Integer.parseInt(seedStr);
+            }
+            catch (Exception e)
+            {
+                seed = seedStr.trim().toUpperCase().hashCode();
+            }
+            sidePanel.regenerateMap(seed);
+        }
     }
 
     public void showInformation()

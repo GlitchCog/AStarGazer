@@ -117,6 +117,14 @@ public class PathFinder
     }
 
     /**
+     * Get the seed that generated the current map
+     */
+    public int getSeed()
+    {
+        return map.getSeed();
+    }
+
+    /**
      * Get the open set which contains points that have yet to be visited stored as a min-heap based on the point cost
      * (Note that this "set" is actually a heap, so a manual test for whether the point being added should be used prior
      * to calling push().) The heap is used for the open set to quickly return the point with the minimum cost.
