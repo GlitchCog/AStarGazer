@@ -8,6 +8,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
@@ -23,7 +25,7 @@ import astargazer.map.WeightedPoint;
  * 
  * @author Matt Yanos
  */
-public class MapPanel extends JPanel implements MouseInputListener
+public class MapPanel extends JPanel implements MouseInputListener, ComponentListener
 {
     /**
      * The PathFinder that determines the path between the start and the goal points on the tilemap
@@ -127,8 +129,18 @@ public class MapPanel extends JPanel implements MouseInputListener
 
         updateStatusBar();
 
+        addComponentListener(this);
         addMouseMotionListener(this);
         addMouseListener(this);
+    }
+
+    /**
+     * Reset the offsets for the top left corner to center the map
+     */
+    public void centerMap()
+    {
+        offsetX = (getWidth() - getMapPixelWidth()) / 2;
+        offsetY = (getHeight() - getMapPixelHeight()) / 2;
     }
 
     /**
@@ -191,7 +203,7 @@ public class MapPanel extends JPanel implements MouseInputListener
      */
     private int getXCoor()
     {
-        return (getWidth() - (pf.getMap().getCols() * tileWidth + getAxisLabelOffset())) / 2 + offsetX;
+        return offsetX;//(getWidth() - (pf.getMap().getCols() * tileWidth + getAxisLabelOffset())) / 2 + offsetX;
     }
 
     /**
@@ -201,7 +213,7 @@ public class MapPanel extends JPanel implements MouseInputListener
      */
     private int getYCoor()
     {
-        return (getHeight() - (pf.getMap().getRows() * tileHeight + getAxisLabelOffset())) / 2 + offsetY;
+        return offsetY;//(getHeight() - (pf.getMap().getRows() * tileHeight + getAxisLabelOffset())) / 2 + offsetY;
     }
 
     @Override
@@ -231,6 +243,8 @@ public class MapPanel extends JPanel implements MouseInputListener
 
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setStroke(stroke);
+
+        paintGridLabels(g2d, x, y);
 
         if (pf.getCursor() != null)
         {
@@ -299,27 +313,10 @@ public class MapPanel extends JPanel implements MouseInputListener
     {
         TileMap map = pf.getMap();
 
-        int textSize = Math.min(tileWidth, tileHeight);
-        textSize = textSize / 4 + 4;
-        g.setFont(new Font(Font.MONOSPACED, Font.PLAIN, textSize));
-
         for (int row = 0; row < map.getRows(); row++)
         {
-            g.setColor(colorScheme.text);
-            String str = "" + Integer.toHexString(row).toUpperCase();
-            while (str.length() < 2) str = '0' + str;
-            g.drawString(str, x + (getAxisLabelOffset() - g.getFontMetrics().charsWidth(str.toCharArray(), 0, str.length())) / 2, 
-                         y + getAxisLabelOffset() + (row * tileHeight) + (g.getFontMetrics().getHeight() + tileHeight) / 2);
             for (int col = 0; col < map.getCols(); col++)
             {
-                if (row == 0)
-                {
-                    g.setColor(colorScheme.text);
-                    str = "" + Integer.toHexString(col).toUpperCase();
-                    while (str.length() < 2) str = '0' + str;
-                    g.drawString(str, x + getAxisLabelOffset() + col * tileWidth + (tileWidth - g.getFontMetrics().charsWidth(str.toCharArray(), 0, str.length())) / 2, 
-                                      y + (g.getFontMetrics().getHeight() + getAxisLabelOffset()) / 2);
-                }
                 if (!map.isTraversable(row, col))
                 {
                     drawBlock(g, x, y, row, col);
@@ -329,6 +326,43 @@ public class MapPanel extends JPanel implements MouseInputListener
         g.setColor(colorScheme.grid); // Draw outer border
         g.drawRect(x, y, pf.getMap().getCols() * tileWidth + getAxisLabelOffset(), pf.getMap().getRows() * tileHeight + getAxisLabelOffset());
     }
+
+    /**
+     * Draw the labels along the top and left side of the tilemap
+     * 
+     * @param g2d
+     * @param x the X coordinate of the upper left corner of the tilemap
+     * @param y the Y coordinate of the upper left corner of the tilemap
+     */
+    private void paintGridLabels(Graphics g2d, int x, int y)
+    {
+        TileMap map = pf.getMap();
+
+        int textSize = Math.min(tileWidth, tileHeight);
+        textSize = textSize / 4 + 4;
+        g2d.setFont(new Font(Font.MONOSPACED, Font.PLAIN, textSize));
+
+        for (int row = 0; row < map.getRows(); row++)
+        {
+            g2d.setColor(colorScheme.text);
+            String str = "" + Integer.toString(row);
+            while (str.length() < 2) str = '0' + str;
+            g2d.drawString(str, x + (getAxisLabelOffset() - g2d.getFontMetrics().charsWidth(str.toCharArray(), 0, str.length())) / 2, 
+                         y + getAxisLabelOffset() + (row * tileHeight) + (g2d.getFontMetrics().getHeight() + tileHeight) / 2);
+            for (int col = 0; col < map.getCols(); col++)
+            {
+                if (row == 0)
+                {
+                    g2d.setColor(colorScheme.text);
+                    str = "" + Integer.toString(col);
+                    while (str.length() < 2) str = '0' + str;
+                    g2d.drawString(str, x + getAxisLabelOffset() + col * tileWidth + (tileWidth - g2d.getFontMetrics().charsWidth(str.toCharArray(), 0, str.length())) / 2, 
+                                      y + (g2d.getFontMetrics().getHeight() + getAxisLabelOffset()) / 2);
+                }
+            }
+        }
+    }
+
 
     /**
      * Draw the path being tested as the algorithm runs or the final path after the algorithm has finished
@@ -433,6 +467,50 @@ public class MapPanel extends JPanel implements MouseInputListener
         g2d.drawLine(dx + dw, dy, dx + dw, dy + dh);
     }
 
+    /**
+     * Get the width of the tile map in pixels
+     * 
+     * @return mapPixelWidth
+     */
+    private int getMapPixelWidth()
+    {
+        return pf.getMap().getCols() * tileWidth + getAxisLabelOffset();
+    }
+
+    /**
+     * Get the height of the tile map in pixels
+     * 
+     * @return mapPixelHeight
+     */
+    private int getMapPixelHeight()
+    {
+        return pf.getMap().getRows() * tileHeight + getAxisLabelOffset();
+    }
+
+    /**
+     * Ensure the map stays on the screen when resizes and zooming happens
+     */
+    public void enforceBoundaries()
+    {
+        if (getMapPixelWidth() < getWidth())
+        {
+            offsetX = Math.min(getWidth() - getMapPixelWidth(), Math.max(offsetX, 0));
+        }
+        else
+        {
+            offsetX = Math.min(0, Math.max(offsetX, getWidth() - getMapPixelWidth()));
+        }
+
+        if (getHeight() > getMapPixelHeight())
+        {
+            offsetY = Math.min(getHeight() - getMapPixelHeight(), Math.max(offsetY, 0));
+        }
+        else
+        {
+            offsetY = Math.min(0, Math.max(offsetY, getHeight() - getMapPixelHeight()));
+        }
+    }
+
     @Override
     public void mouseClicked(MouseEvent e)
     {
@@ -468,8 +546,23 @@ public class MapPanel extends JPanel implements MouseInputListener
     @Override
     public void mouseDragged(MouseEvent e)
     {
-        offsetX = tempOffsetX + (int)e.getX() - startOffsetX;
-        offsetY = tempOffsetY + (int)e.getY() - startOffsetY;
+        if (getMapPixelWidth() < getWidth())
+        {
+            offsetX = Math.min(getWidth() - getMapPixelWidth(), Math.max(tempOffsetX + (int)e.getX() - startOffsetX, 0));
+        }
+        else
+        {
+            offsetX = Math.min(0, Math.max(tempOffsetX + (int)e.getX() - startOffsetX, getWidth() - getMapPixelWidth()));
+        }
+
+        if (getHeight() > getMapPixelHeight())
+        {
+            offsetY = Math.min(getHeight() - getMapPixelHeight(), Math.max(tempOffsetY + (int)e.getY() - startOffsetY, 0));
+        }
+        else
+        {
+            offsetY = Math.min(0, Math.max(tempOffsetY + (int)e.getY() - startOffsetY, getHeight() - getMapPixelHeight()));
+        }
         repaint();
     }
 
@@ -515,4 +608,24 @@ public class MapPanel extends JPanel implements MouseInputListener
         }
     }
 
+    @Override
+    public void componentResized(ComponentEvent e)
+    {
+        enforceBoundaries();
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e)
+    {
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent e)
+    {
+    }
+
+    @Override
+    public void componentShown(ComponentEvent e)
+    {
+    }
 }

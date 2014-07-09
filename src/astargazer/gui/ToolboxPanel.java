@@ -219,6 +219,7 @@ public class ToolboxPanel extends JPanel
                 else if (SLIDER_TEXT_SIZE.equals(s.getLabel()))
                 {
                     mp.setTileSize(s.getValue());
+                    mp.enforceBoundaries();
                     mp.updateDrawing();
                 }
             }
@@ -307,6 +308,7 @@ public class ToolboxPanel extends JPanel
     private void regenerateMap(boolean reseed)
     {
         pf.reset(MapGenerator.getInstance().generate(reseed));
+        mp.centerMap();
         mp.updateDrawing();
         infoPanel.updateStats(pf);
     }
