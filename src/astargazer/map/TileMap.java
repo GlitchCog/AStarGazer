@@ -109,8 +109,7 @@ public class TileMap
      * Whether the point is a traversable point on this tile map
      * 
      * @param wp the point to check
-     * @return
-     *         traversable
+     * @return traversable
      */
     public boolean isTraversable(WeightedPoint wp)
     {
@@ -122,7 +121,7 @@ public class TileMap
      * 
      * @param row
      * @param col
-     * @return
+     * @return traversable
      */
     public boolean isTraversable(int row, int col)
     {
@@ -144,7 +143,7 @@ public class TileMap
     /**
      * Get the number of rows
      * 
-     * @return
+     * @return number of rows
      */
     public int getRows()
     {
@@ -154,11 +153,21 @@ public class TileMap
     /**
      * Get the number of columns
      * 
-     * @return
+     * @return number of columns
      */
     public int getCols()
     {
         return map[0].length;
+    }
+
+    /**
+     * Get the map statistics to be displayed on the status bar
+     * 
+     * @return map statistics
+     */
+    public String getMapStats()
+    {
+        return "Seed:" + seed + "   w:" + getCols() + " h:" + getRows() + "   Start:" + start.toString() + ", Goal:" + goal.toString();
     }
 
 }

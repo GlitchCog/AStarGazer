@@ -4,6 +4,8 @@ import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -20,9 +22,20 @@ import astargazer.map.TileMap;
  */
 public class Window extends JFrame
 {
+    /**
+     * Popup window that displays help information and handles calls to the About menu option
+     */
     private HelpPopup helpPopup;
 
-    private ToolboxPanel sidePanel;
+    /**
+     * Panel of tools that is displayed on the left side of this window
+     */
+    private ToolboxPanel toolPanel;
+
+    /**
+     * Horizontal bar to display information below the map panel
+     */
+    private StatusBar statusBar;
 
     /**
      * The panel that displays the tilemap and the algorithm visualizations
@@ -32,7 +45,7 @@ public class Window extends JFrame
     /**
      * The PathFinder runs the algorithm
      */
-    private PathFinder pf;
+    private PathFinder pathFinder;
 
     /**
      * Construct the main window
@@ -41,7 +54,7 @@ public class Window extends JFrame
     {
         TileMap map = MapGenerator.getInstance().generate(false);
 
-        this.pf = new PathFinder(map);
+        this.pathFinder = new PathFinder(map);
 
         buildGui();
     }
@@ -58,29 +71,59 @@ public class Window extends JFrame
 
         JPanel everything = new JPanel(new GridBagLayout());
 
+        everything.addMouseWheelListener(new MouseWheelListener() {
+            @Override
+            public void mouseWheelMoved(MouseWheelEvent e)
+            {
+                toolPanel.incrementZoom(e.getWheelRotation());
+            }
+        });
+
         GridBagConstraints gbc = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0);
 
-        mapPanel = new MapPanel(pf);
+        statusBar = new StatusBar();
 
-        sidePanel = new ToolboxPanel(mapPanel, pf);
+        mapPanel = new MapPanel(pathFinder, statusBar);
 
-        gbc.weighty = 0.0f;
-        gbc.anchor = GridBagConstraints.WEST;
-        gbc.fill = GridBagConstraints.VERTICAL;
-        gbc.gridx = 0;
-        everything.add(sidePanel, gbc);
+        toolPanel = new ToolboxPanel(mapPanel, pathFinder);
+
+        JPanel rightPanel = new JPanel(new GridBagLayout());
 
         gbc.anchor = GridBagConstraints.EAST;
         gbc.fill = GridBagConstraints.BOTH;
         gbc.weightx = 1.0;
         gbc.weighty = 1.0;
-        gbc.gridx = 1;
-        everything.add(mapPanel, gbc);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        rightPanel.add(mapPanel, gbc);
+
+        gbc.gridy++;
+        gbc.weightx = 1.0;
+        gbc.weighty = 0.0;
+        gbc.anchor = GridBagConstraints.SOUTH;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+
+        rightPanel.add(statusBar, gbc);
+
+        gbc.weightx = 0.0f;
+        gbc.weighty = 0.0f;
+        gbc.anchor = GridBagConstraints.WEST;
+        gbc.fill = GridBagConstraints.VERTICAL;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        everything.add(toolPanel, gbc);
+
+        gbc.anchor = GridBagConstraints.EAST;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.gridx++;
+        everything.add(rightPanel, gbc);
 
         add(everything);
 
-        setMinimumSize(new Dimension(800, 800));
-        setSize(1024, 800);
+        setMinimumSize(new Dimension(800, 670));
+        setSize(1024, 768);
 
         setJMenuBar(new Menu(this));
 
@@ -92,7 +135,7 @@ public class Window extends JFrame
      */
     public void showSeedInput()
     {
-        String seedStr = JOptionPane.showInputDialog(this, "Map Seed: ", pf.getSeed());
+        String seedStr = JOptionPane.showInputDialog(this, "Map Seed: ", pathFinder.getSeed());
         int seed;
         if (seedStr != null)
         {
@@ -104,7 +147,7 @@ public class Window extends JFrame
             {
                 seed = seedStr.trim().toUpperCase().hashCode();
             }
-            sidePanel.regenerateMap(seed);
+            toolPanel.regenerateMap(seed);
         }
     }
 

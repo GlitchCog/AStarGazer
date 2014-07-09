@@ -39,7 +39,7 @@ public class InfoPanel extends JPanel
         super(new GridBagLayout());
         formatter = new DecimalFormat("00.00");
         info = new JLabel("Info", JLabel.LEFT);
-        info.setFont(new Font(Font.MONOSPACED, Font.BOLD, 13));
+        info.setFont(new Font(Font.MONOSPACED, Font.BOLD, 12));
         add(info, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, 
                                          GridBagConstraints.NORTHWEST, 
                                          GridBagConstraints.HORIZONTAL, 
@@ -67,7 +67,6 @@ public class InfoPanel extends JPanel
         }
 
         String text = "<html><pre>";
-        text += "Map Seed: " + pf.getSeed() + "<br>";
         text += WeightedPoint.toLabeledString("Start", pf.getStart()) + "<br>";
         text += WeightedPoint.toLabeledString("Goal", pf.getGoal()) + "<br>";
         text += WeightedPoint.toLabeledString("Cursor", pf.getCursor()) + "<br>";

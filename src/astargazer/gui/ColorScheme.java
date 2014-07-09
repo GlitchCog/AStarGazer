@@ -155,7 +155,7 @@ public class ColorScheme
 
     public static final ColorScheme[] SCHEMES = {DEFAULT_SCHEME, INVERTED_SCHEME, GRASS_SCHEME, WATER_SCHEME, FIRE_SCHEME, ICE_SCHEME, TRON_SCHEME, GRAYSCALE_SCHEME};
 
-    public String name;
+    public final String name;
 
     public final Color background;
 

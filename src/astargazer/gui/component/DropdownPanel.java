@@ -1,6 +1,8 @@
 package astargazer.gui.component;
 
-import java.awt.GridLayout;
+import java.awt.Insets;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
 import java.awt.event.ActionListener;
 
 import javax.swing.JLabel;
@@ -17,13 +19,22 @@ public class DropdownPanel extends JPanel
 
     public DropdownPanel(Dropdown[] dropdowns, ActionListener dal)
     {
-        super(new GridLayout(dropdowns.length * 2, 1));
+        super(new GridBagLayout());
+
+        GridBagConstraints gbc = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.WEST, GridBagConstraints.NONE, new Insets(0, 0, 0, 0), 0, 0);
 
         for (int i = 0; i < dropdowns.length; i++)
         {
-            add( new JLabel( dropdowns[i].getLabel() + ": " ) );
             dropdowns[i].addActionListener(dal);
-            add(dropdowns[i]);
+
+            gbc.anchor = GridBagConstraints.EAST;
+            gbc.gridx = 0;
+            add( new JLabel( dropdowns[i].getLabel() + ": " ), gbc );
+
+            gbc.anchor = GridBagConstraints.WEST;
+            gbc.gridx = 1;
+            add(dropdowns[i], gbc);
+            gbc.gridy++;
         }
 
         this.dropdowns = dropdowns;

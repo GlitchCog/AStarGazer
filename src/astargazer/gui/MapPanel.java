@@ -2,6 +2,7 @@ package astargazer.gui;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -28,6 +29,11 @@ public class MapPanel extends JPanel implements MouseInputListener
      * The PathFinder that determines the path between the start and the goal points on the tilemap
      */
     private PathFinder pf;
+
+    /**
+     * The horizontal status bar show below this map panel to display information about the map
+     */
+    private StatusBar sb;
 
     /**
      * How wide to draw the tiles
@@ -60,13 +66,43 @@ public class MapPanel extends JPanel implements MouseInputListener
     private Stroke stroke;
 
     /**
+     * Map drawing offset on the X axis
+     */ 
+    private int offsetX;
+
+    /**
+     * Map drawing offset on the Y axis
+     */
+    private int offsetY;
+
+    /**
+     * X coordinate when the mouse is clicked to drag the map
+     */
+    private int startOffsetX;
+
+    /**
+     * Y coordinate when the mouse is clicked to drag the map
+     */
+    private int startOffsetY;
+
+    /**
+     * X coordinate of the previous offset when dragging the map
+     */
+    private int tempOffsetX;
+
+    /**
+     * Y coordinate of the previous offset when dragging the map
+     */
+    private int tempOffsetY;
+
+    /**
      * Construct a MapPanel for the specified PathFinder
      * 
      * @param pf PathFinder
      */
-    public MapPanel(PathFinder pf)
+    public MapPanel(PathFinder pf, StatusBar sb)
     {
-        this(pf, 12, 12, ColorScheme.SCHEMES[0]);
+        this(pf, sb, 12, 12, ColorScheme.SCHEMES[0]);
     }
 
     /**
@@ -77,9 +113,10 @@ public class MapPanel extends JPanel implements MouseInputListener
      * @param tileHeight
      * @param colorScheme
      */
-    public MapPanel(PathFinder pf, int tileWidth, int tileHeight, ColorScheme colorScheme)
+    public MapPanel(PathFinder pf, StatusBar sb, int tileWidth, int tileHeight, ColorScheme colorScheme)
     {
         this.pf = pf;
+        this.sb = sb;
 
         this.tileWidth = tileWidth;
         this.tileHeight = tileHeight;
@@ -87,6 +124,8 @@ public class MapPanel extends JPanel implements MouseInputListener
         this.stroke = new BasicStroke(4.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
 
         setColorScheme(colorScheme);
+
+        updateStatusBar();
 
         addMouseMotionListener(this);
         addMouseListener(this);
@@ -133,7 +172,16 @@ public class MapPanel extends JPanel implements MouseInputListener
      */
     public void updateDrawing()
     {
+        updateStatusBar();
         repaint();
+    }
+
+    /**
+     * Updates the message displayed on the status bar
+     */
+    private void updateStatusBar()
+    {
+        sb.setMessage(pf.getMap().getMapStats());
     }
 
     /**
@@ -143,7 +191,7 @@ public class MapPanel extends JPanel implements MouseInputListener
      */
     private int getXCoor()
     {
-        return (getWidth() - (pf.getMap().getCols() * tileWidth + getAxisLabelOffset())) / 2;
+        return (getWidth() - (pf.getMap().getCols() * tileWidth + getAxisLabelOffset())) / 2 + offsetX;
     }
 
     /**
@@ -153,9 +201,10 @@ public class MapPanel extends JPanel implements MouseInputListener
      */
     private int getYCoor()
     {
-        return (getHeight() - (pf.getMap().getRows() * tileHeight + getAxisLabelOffset())) / 2;
+        return (getHeight() - (pf.getMap().getRows() * tileHeight + getAxisLabelOffset())) / 2 + offsetY;
     }
 
+    @Override
     public void paint(Graphics g)
     {
         g.setColor(colorScheme.background);
@@ -196,11 +245,6 @@ public class MapPanel extends JPanel implements MouseInputListener
         if (pf.getCursor() != null)
         {
             drawPoint(g2d, pf.getCursor(), colorScheme.cursor, x, y, false);
-        }
-
-        if (selectedTile != null)
-        {
-            paintStats(g2d);
         }
     }
 
@@ -312,26 +356,6 @@ public class MapPanel extends JPanel implements MouseInputListener
     }
 
     /**
-     * Draw the tile statistics for whichever tile the mouse is currently hovering over
-     * 
-     * @param g
-     */
-    private void paintStats(Graphics2D g)
-    {
-        String msg = selectedTile.toString() + "=" + selectedTile.getCost();
-        int w = g.getFontMetrics().charsWidth(msg.toCharArray(), 0, msg.length());
-        int h = g.getFontMetrics().getHeight();
-        int x = getXCoor() + (selectedTile.getCol() + 2) * tileWidth;
-        int y = getYCoor() + (selectedTile.getRow() + 2) * tileHeight;
-        g.setColor(colorScheme.background);
-        g.fillRect(x, y - (tileHeight + h) / 2, w + 10, h * 2);
-        g.setColor(colorScheme.grid);
-        g.drawRect(x, y - (tileHeight + h) / 2, w + 10, h * 2);
-        g.setColor(colorScheme.text);
-        g.drawString(msg, x + 5, y);
-    }
-
-    /**
      * Draw the specified point
      * 
      * @param g2d
@@ -409,31 +433,47 @@ public class MapPanel extends JPanel implements MouseInputListener
         g2d.drawLine(dx + dw, dy, dx + dw, dy + dh);
     }
 
+    @Override
     public void mouseClicked(MouseEvent e)
     {
     }
 
+    @Override
     public void mousePressed(MouseEvent e)
     {
+        setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
+        startOffsetX = (int)e.getX();
+        startOffsetY = (int)e.getY();
+        tempOffsetX = offsetX;
+        tempOffsetY = offsetY;
     }
 
+    @Override
     public void mouseReleased(MouseEvent e)
     {
+        setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
 
+    @Override
     public void mouseEntered(MouseEvent e)
     {
     }
 
+    @Override
     public void mouseExited(MouseEvent e)
     {
         selectedTile = null;
     }
 
+    @Override
     public void mouseDragged(MouseEvent e)
     {
+        offsetX = tempOffsetX + (int)e.getX() - startOffsetX;
+        offsetY = tempOffsetY + (int)e.getY() - startOffsetY;
+        repaint();
     }
 
+    @Override
     public void mouseMoved(MouseEvent  e)
     {
         int row = (e.getY() - getYCoor()) / tileHeight - 1;
@@ -442,6 +482,7 @@ public class MapPanel extends JPanel implements MouseInputListener
         if ((row < 0 || col < 0 || row > pf.getMap().getRows() - 1 || col > pf.getMap().getCols() - 1)) // Out of bounds
         {
             selectedTile = null;
+            sb.setPointLabelText("");
         }
         else
         {
@@ -469,9 +510,9 @@ public class MapPanel extends JPanel implements MouseInputListener
             {
                 selectedTile = loc;
             }
-        }
 
-        updateDrawing();
+            sb.setPointLabelText(selectedTile.toString() + "=" + selectedTile.getCost());
+        }
     }
 
 }

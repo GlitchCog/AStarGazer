@@ -65,6 +65,11 @@ public class ToolboxPanel extends JPanel
     private final String CHECKBOX_TEXT_SWAP = "Swap Start and Goal Points";
 
     /**
+     * The slider to zoom in or out of the map panel, made a member so the scroll wheel listener can modify it
+     */
+    private Slider zoomSlider;
+
+    /**
      * Timer to increment the steps in the algorithm
      */
     private Timer solveTimer;
@@ -114,7 +119,7 @@ public class ToolboxPanel extends JPanel
     {
         setLayout(new GridBagLayout());
 
-        GridBagConstraints gbc = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(12, 12, 12, 12), 0, 0);
+        GridBagConstraints gbc = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(8, 8, 8, 8), 0, 0);
 
         ActionListener al = new ActionListener() {
             @Override
@@ -171,6 +176,7 @@ public class ToolboxPanel extends JPanel
         Dropdown[] dropdowns = new Dropdown[3];
 
         ActionListener dal = new ActionListener() {
+            @Override
             public void actionPerformed( ActionEvent e )
             {
                 Dropdown d = ((Dropdown)e.getSource());
@@ -219,7 +225,8 @@ public class ToolboxPanel extends JPanel
         };
 
         sliders[0] = new Slider(SLIDER_TEXT_SPEED, 0, 1000, 0);
-        sliders[1] = new Slider(SLIDER_TEXT_SIZE, 10, 32, 16);
+        zoomSlider = new Slider(SLIDER_TEXT_SIZE, 10, 32, 16);
+        sliders[1] = zoomSlider;
 
         setSolveDelay(sliders[0].getValue());
         mp.setTileSize(sliders[1].getValue());
@@ -314,6 +321,20 @@ public class ToolboxPanel extends JPanel
         pf.reset(MapGenerator.getInstance().generate(seed));
         mp.updateDrawing();
         infoPanel.updateStats(pf);
+    }
+
+    /**
+     * Increment the zoom
+     * 
+     * @param amt
+     */
+    public void incrementZoom(int amt)
+    {
+        int newValue = zoomSlider.getValue() + amt;
+        if (newValue >= zoomSlider.getMinimum() && newValue <= zoomSlider.getMaximum())
+        {
+            zoomSlider.setValue(newValue);
+        }
     }
 
 }

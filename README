@@ -158,3 +158,41 @@ Seed Map Generator - Selecting this option from the File menu will permit you
                      Seeds are your keys to revisiting maps as each key will 
                      regenerate the same unique map each time it is used as the 
                      seed.
+
+Seed values for notable maps (with Obstacles enabled):
+
+Randomizing equicost nodes can dramatically affect the route in these maps:
+1260, 1275
+
+Maps that take the algorithm a lot of computation to traverse:
+485, 759, 769, 1178, 1271, 2264, 733, 1124, 1616 
+
+These maps show off the distinction between the Euclidean and the Euclidean 
+squared heuristics well:
+264, 393, 747, 1115
+
+There is a race effect between multiple routes when using some heuristics in 
+these maps, especially with the full Dijkstra search enabled:
+534, 804, 1503, 1626, 1881, 2509, 1069, 1305, 2241, 2986
+
+These maps feature drastic shortcuts when the 8-directional neighbor selection 
+scheme is used instead of the 4-directional scheme:
+824, 1142, 1531, 2013, 2065, 2168, 2376, 2546
+
+Finding a route in these maps is only possible for a neighbor selection scheme 
+that permits diagonal traversal:
+527, 796, 1010, 1277, 1304, 1355, 1384, 1737, 1868, 2000, 2142, 2272, 2346, 
+2430, 2602, 2677, 2704, 2812, 3012
+
+Trivial maps where the start and goal are on the same point:
+2203, 2517
+
+These maps aren't especially unique, but feature interesting solutions:
+ 172,  185,  235,  259,  364,  378,  388,  402,  466,  468,  484,  596,  674, 
+ 694,  709,  713,  719,  742,  756,  760,  763,  782,  791,  814,  858,  863, 
+ 885,  937, 1163, 1234, 1377, 1403, 1469, 1570, 1597, 1614, 1619, 1623, 1628, 
+1629, 1633, 1645, 1650, 1678, 1686, 1705, 1786, 1788, 1810, 1812, 1842, 1983, 
+2006, 2038, 2145, 2172, 2219, 2234, 2243, 2256, 2292, 2308, 2317, 2348, 2367, 
+2434, 2439, 2558, 2559, 2588, 2639, 2673, 2707, 2711, 2718, 2725, 2770, 2773, 
+2782, 2841, 2904, 2930, 2934, 2962, 2963, 2973
+
