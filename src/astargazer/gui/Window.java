@@ -75,7 +75,7 @@ public class Window extends JFrame
             @Override
             public void mouseWheelMoved(MouseWheelEvent e)
             {
-                toolPanel.incrementZoom(e.getWheelRotation());
+                toolPanel.incrementZoom(-e.getWheelRotation());
             }
         });
 
