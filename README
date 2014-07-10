@@ -165,11 +165,11 @@ Randomizing equicost nodes can dramatically affect the route in these maps:
 1260, 1275
 
 Maps that take the algorithm a lot of computation to traverse:
-485, 759, 769, 1178, 1271, 2264, 733, 1124, 1616 
+485, 759, 769, 1178, 1271, 2264, 733, 1124, 1616, 3850
 
 These maps show off the distinction between the Euclidean and the Euclidean 
 squared heuristics well:
-264, 393, 747, 1115, 7478
+264, 393, 747, 1115, 7478, 3902
 
 There is a race effect between multiple routes when using some heuristics in 
 these maps, especially with the full Dijkstra search enabled:
@@ -177,12 +177,13 @@ these maps, especially with the full Dijkstra search enabled:
 
 These maps feature drastic shortcuts when a neighbor selection scheme that 
 permits diagonal traversal, like the 8-directional scheme, is used:
-824, 1142, 1531, 2013, 2065, 2168, 2376, 2546
+824, 1142, 1531, 2013, 2065, 2168, 2376, 2546, 3019, 3161, 3657, 3819, 3911, 
+6206
 
 Finding a route in these maps is only possible for a neighbor selection scheme 
 that permits diagonal traversal, like the 8-directional scheme:
 527, 796, 1010, 1277, 1304, 1355, 1384, 1737, 1868, 2000, 2142, 2272, 2346, 
-2430, 2602, 2677, 2704, 2812, 3012
+2430, 2602, 2677, 2704, 2812, 3012, 3030, 3287, 3468, 3763, 3898
 
 Trivial maps where the start and goal are on the same point:
 2203, 2517
@@ -194,5 +195,7 @@ These maps aren't especially unique, but feature interesting solutions:
 1629, 1633, 1645, 1650, 1678, 1686, 1705, 1786, 1788, 1810, 1812, 1842, 1983, 
 2006, 2038, 2145, 2172, 2219, 2234, 2243, 2256, 2292, 2308, 2317, 2348, 2367, 
 2434, 2439, 2558, 2559, 2588, 2639, 2673, 2707, 2711, 2718, 2725, 2770, 2773, 
-2782, 2841, 2904, 2930, 2934, 2962, 2963, 2973
-
+2782, 2841, 2904, 2930, 2934, 2962, 2963, 2973, 3051, 3110, 3171, 3270, 3278, 
+3348, 3417, 3451, 3462, 3479, 3481, 3489, 3507, 3518, 3542, 3551, 3658, 3670, 
+3686, 3690, 3711, 3736, 3758, 3767, 3892, 3907, 3912, 3944, 3952, 3980, 3982, 
+3988, 4004
