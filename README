@@ -52,8 +52,8 @@ Reset - Resets the algorithm to its initial state to be re-run.
 
 Generate - Generates a new random map and start and goal points.
 
-Heuristics - Select which heuristic to use, meaning how should the distance 
-             between two points be evaluated in the algorithm.
+Heuristics - Select which heuristic to use, meaning how the distance between 
+             two points should be evaluated in the algorithm.
 
     Manhattan - Manhattan (or Taxicab) distance only permits traveling along 
                 the x and y axes, so the distance between (0, 0) and (1, 1) is 
