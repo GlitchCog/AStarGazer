@@ -169,18 +169,18 @@ Maps that take the algorithm a lot of computation to traverse:
 
 These maps show off the distinction between the Euclidean and the Euclidean 
 squared heuristics well:
-264, 393, 747, 1115
+264, 393, 747, 1115, 7478
 
 There is a race effect between multiple routes when using some heuristics in 
 these maps, especially with the full Dijkstra search enabled:
 534, 804, 1503, 1626, 1881, 2509, 1069, 1305, 2241, 2986
 
-These maps feature drastic shortcuts when the 8-directional neighbor selection 
-scheme is used instead of the 4-directional scheme:
+These maps feature drastic shortcuts when a neighbor selection scheme that 
+permits diagonal traversal, like the 8-directional scheme, is used:
 824, 1142, 1531, 2013, 2065, 2168, 2376, 2546
 
 Finding a route in these maps is only possible for a neighbor selection scheme 
-that permits diagonal traversal:
+that permits diagonal traversal, like the 8-directional scheme:
 527, 796, 1010, 1277, 1304, 1355, 1384, 1737, 1868, 2000, 2142, 2272, 2346, 
 2430, 2602, 2677, 2704, 2812, 3012
 
