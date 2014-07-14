@@ -128,6 +128,8 @@ public class Window extends JFrame
         setJMenuBar(new Menu(this));
 
         setVisible(true);
+
+        mapPanel.centerMap();
     }
 
     /**
