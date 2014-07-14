@@ -23,16 +23,16 @@ public class NeighborJumpPoint extends NeighborSelector
     {
         List<WeightedPoint> neighbors = new ArrayList<WeightedPoint>();
 
-        final float maxDistance = Math.max(Math.min(map.getCols(), map.getRows()) / 4.0f, 2.0f); // One quarter the shortest map dimension (or at least 2)
+        final int maxDistance = (int)Math.max(Math.min(map.getCols(), map.getRows()) / 4.0f, 2.0f); // One quarter the shortest map dimension (or at least 2)
 
-        final double deltaAngle = 2.0 * Math.PI / (SPOKE_COUNT - 1);
+        final double deltaAngle = 2.0 * Math.PI / SPOKE_COUNT;
 
         double testRow, testCol;
         WeightedPoint addition;
         for (float angle = 0.0f; angle < Math.PI * 2.0; angle += deltaAngle)
         {
-            testRow = cursor.getRow();
-            testCol = cursor.getCol();
+            testRow = cursor.getRow() + 0.5;
+            testCol = cursor.getCol() + 0.5;
             while (testCol > 0 && testCol < map.getCols() - 1 && testRow > 0 && testRow < map.getRows() - 1)
             {
                 addition = new WeightedPoint((int)testRow, (int)testCol);
