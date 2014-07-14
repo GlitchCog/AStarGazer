@@ -54,8 +54,8 @@ public class GeneratorMaze extends MapGenerator
         makePointsOdd(start);
         makePointsOdd(goal);
 
-        int mazeRows = map.length / 2;
-        int mazeCols = map[0].length / 2;
+        int mazeRows = (map.length - 1) / 2;
+        int mazeCols = (map[0].length - 1) / 2;
 
         MazeNode[][] maze = new MazeNode[mazeRows][mazeCols];
 
