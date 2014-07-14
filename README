@@ -116,13 +116,25 @@ Neighbors - Select the method by which neighboring tiles are selected.
 
 Colors - Select a color scheme for the map panel.
 
+Obstacles - Select the type of obstacles to place on the tile map.
+
+    Blocks - Rectangular blocks will be randomly placed in the map.
+
+    Rounded Edges - The same rectangular blocks will be placed in the map, 
+                    but their edges will be rounded off for an organic feel.
+
+    Lines - A series of vertical or horizontal lines will be placed in the map 
+                    with a chance of one or two perpendicular lines as well.
+
+    Random Points - Many single randomly selected tiles will be marked as 
+                    non-traversable in the map.
+
+    Maze - A maze will be generated using the recursive backtracker maze 
+                    generation method.
+
 Solve Delay - How long the solve process wait before running the next step.
 
 Zoom - Zoom in and out of the map panel.
-
-Generate Obstacles - This option will cause maps to generate with random 
-                     obstacle blocks to force the algorithm to find its way 
-                     around things.
 
 Full Dijkstra Search (h=0) - This option sets the h value to zero, meaning 
                      there is no incentive for the algorithm to select a good 
@@ -159,7 +171,7 @@ Seed Map Generator - Selecting this option from the File menu will permit you
                      regenerate the same unique map each time it is used as the 
                      seed.
 
-Seed values for notable maps (with Obstacles enabled):
+Seed values for notable maps (for Block type obstacles):
 
 Randomizing equicost nodes can dramatically affect the route in these maps:
 1260, 1275

@@ -69,6 +69,16 @@ public class WeightedPoint implements Comparable<WeightedPoint>
     }
 
     /**
+     * Set the row for this point
+     * 
+     * @param row
+     */
+    public void setRow(int row)
+    {
+        this.row = row;
+    }
+
+    /**
      * Get the column for this point
      * 
      * @return col
@@ -76,6 +86,16 @@ public class WeightedPoint implements Comparable<WeightedPoint>
     public int getCol()
     {
         return col;
+    }
+
+    /**
+     * Set the column for this point
+     * 
+     * @param col
+     */
+    public void setCol(int col)
+    {
+        this.col = col;
     }
 
     /**

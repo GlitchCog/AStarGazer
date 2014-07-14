@@ -12,7 +12,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import astargazer.PathFinder;
-import astargazer.map.MapGenerator;
+import astargazer.map.generator.MapManager;
 import astargazer.map.TileMap;
 
 /**
@@ -52,7 +52,7 @@ public class Window extends JFrame
      */
     public Window()
     {
-        TileMap map = MapGenerator.getInstance().generate(false);
+        TileMap map = MapManager.getInstance().generate(false);
 
         this.pathFinder = new PathFinder(map);
 

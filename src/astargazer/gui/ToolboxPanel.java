@@ -24,7 +24,8 @@ import astargazer.gui.component.DropdownPanel;
 import astargazer.gui.component.InfoPanel;
 import astargazer.gui.component.Slider;
 import astargazer.gui.component.SliderPanel;
-import astargazer.map.MapGenerator;
+import astargazer.map.generator.MapGenerator;
+import astargazer.map.generator.MapManager;
 import astargazer.map.TileMap;
 import astargazer.map.heuristic.HeuristicScheme;
 import astargazer.map.neighbor.NeighborSelector;
@@ -54,11 +55,11 @@ public class ToolboxPanel extends JPanel
     private final String DROPDOWN_TEXT_HEURISTICS = "Heuristics";
     private final String DROPDOWN_TEXT_NEIGHBORS = "Neighbors";
     private final String DROPDOWN_TEXT_COLORS = "Colors";
+    private final String DROPDOWN_TEXT_OBSTACLES = "Obstacles";
 
     private final String SLIDER_TEXT_SPEED = "Solve Delay";
     private final String SLIDER_TEXT_SIZE = "Zoom";
 
-    private final String CHECKBOX_TEXT_OBSTACLES = "Generate Obstacles";
     private final String CHECKBOX_TEXT_DIJKSTRA = "Full Dijkstra Search (h=0)";
     private final String CHECKBOX_TEXT_RANDOMIZE = "Randomize Equicost Nodes";
     private final String CHECKBOX_TEXT_GRID = "Show Grid";
@@ -173,7 +174,7 @@ public class ToolboxPanel extends JPanel
             }
         });
 
-        Dropdown[] dropdowns = new Dropdown[3];
+        Dropdown[] dropdowns = new Dropdown[4];
 
         ActionListener dal = new ActionListener() {
             @Override
@@ -193,12 +194,18 @@ public class ToolboxPanel extends JPanel
                     mp.setColorScheme((ColorScheme)d.getSelectedItem());
                     mp.updateDrawing();
                 }
+                else if (DROPDOWN_TEXT_OBSTACLES.equals(d.getLabel()))
+                {
+                    MapManager.getInstance().setGenerator((MapGenerator)d.getSelectedItem());
+                    regenerateMap(false);
+                }
             }
         };
 
         dropdowns[0] = new Dropdown(DROPDOWN_TEXT_HEURISTICS, HeuristicScheme.getAllHeuristics() );
         dropdowns[1] = new Dropdown(DROPDOWN_TEXT_NEIGHBORS, NeighborSelector.getAllNeighborSelectors() );
         dropdowns[2] = new Dropdown(DROPDOWN_TEXT_COLORS, ColorScheme.SCHEMES);
+        dropdowns[3] = new Dropdown(DROPDOWN_TEXT_OBSTACLES, MapGenerator.getAllGenerators() );
 
         dropdownPanel = new DropdownPanel(dropdowns, dal);
 
@@ -239,12 +246,7 @@ public class ToolboxPanel extends JPanel
             public void itemStateChanged(ItemEvent e)
             {
                 JCheckBox cb = (JCheckBox)e.getSource();
-                if (CHECKBOX_TEXT_OBSTACLES.equals(cb.getText()))
-                {
-                    MapGenerator.getInstance().setObstacles(cb.isSelected());
-                    regenerateMap(false);
-                }
-                else if (CHECKBOX_TEXT_DIJKSTRA.equals(cb.getText()))
+                if (CHECKBOX_TEXT_DIJKSTRA.equals(cb.getText()))
                 {
                     pf.setDijkstra(cb.isSelected());
                 }
@@ -265,8 +267,7 @@ public class ToolboxPanel extends JPanel
             }
         };
 
-        checkboxPanel = new CheckboxPanel(new String[] {CHECKBOX_TEXT_OBSTACLES, 
-                                                        CHECKBOX_TEXT_DIJKSTRA, 
+        checkboxPanel = new CheckboxPanel(new String[] {CHECKBOX_TEXT_DIJKSTRA, 
                                                         CHECKBOX_TEXT_RANDOMIZE, 
                                                         CHECKBOX_TEXT_GRID, 
                                                         CHECKBOX_TEXT_SWAP}, 
@@ -307,7 +308,7 @@ public class ToolboxPanel extends JPanel
      */
     private void regenerateMap(boolean reseed)
     {
-        pf.reset(MapGenerator.getInstance().generate(reseed));
+        pf.reset(MapManager.getInstance().generate(reseed));
         mp.centerMap();
         mp.updateDrawing();
         infoPanel.updateStats(pf);
@@ -320,7 +321,7 @@ public class ToolboxPanel extends JPanel
      */
     public void regenerateMap(int seed)
     {
-        pf.reset(MapGenerator.getInstance().generate(seed));
+        pf.reset(MapManager.getInstance().generate(seed));
         mp.updateDrawing();
         infoPanel.updateStats(pf);
     }
