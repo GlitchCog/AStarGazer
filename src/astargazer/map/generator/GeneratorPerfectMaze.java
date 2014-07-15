@@ -8,11 +8,11 @@ import java.util.Stack;
 import astargazer.map.WeightedPoint;
 
 /**
- * Generate a 2D Boolean map with a set of obstacles representing a maze
+ * Generate a 2D Boolean map with a set of obstacles representing a perfect maze
  * 
  * @author Matt Yanos
  */
-public class GeneratorMaze extends MapGenerator
+public class GeneratorPerfectMaze extends MapGenerator
 {
     /**
      * MazeNode is used in the recursive backtracker maze generation algorithm
@@ -244,7 +244,7 @@ public class GeneratorMaze extends MapGenerator
     @Override
     public String getLabel()
     {
-        return "Maze";
+        return "Perfect Maze";
     }
 
 }

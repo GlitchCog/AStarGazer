@@ -36,6 +36,10 @@ public class HelpPopup extends JDialog
 
     public static final String HTML_FONT_NAME = "Arial, Helvetica";
 
+    public static final String HTML_GREEN = "33FF33";
+
+    public static final String HTML_RED = "FF3333";
+
     private static final String ABOUT_CONTENTS = "<html><table bgcolor=#EEEEEE width=100% border=1><tr><td><center><font face=\"" + HTML_FONT_NAME + "\"><b>AStarGazer</b> is a program for visualizing<br />the A* search algorithm on a tile map<br /><br />By Matt Yanos<br /><br /><a href=\"www.github.com/GlitchCog/AStarGazer\">www.github.com/GlitchCog/AStarGazer</a></font></center></td></tr></table></html>";
 
     public HelpPopup(Window window)

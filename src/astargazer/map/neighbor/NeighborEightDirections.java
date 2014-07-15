@@ -2,6 +2,7 @@ package astargazer.map.neighbor;
 
 import java.util.List;
 
+import astargazer.gui.HelpPopup;
 import astargazer.map.WeightedPoint;
 import astargazer.map.TileMap;
 import astargazer.map.heuristic.HeuristicScheme;
@@ -53,6 +54,14 @@ public class NeighborEightDirections extends NeighborSelector
                "This works best with the Euclidean heuristic. Combining " + 
                "this neighbor selection scheme with the Manhattan " + 
                "heuristic can yield strange results because a diagonal " + 
-               "path over a single tile is counted as a distance of 2.";
+               "path over a single tile is counted as a distance of 2.<br><br>" + 
+               "<center>" + 
+               "<table border=1>" + 
+               "<tr><td bgcolor=#" + HelpPopup.HTML_GREEN + "><center>NW</center></td><td bgcolor=#" + HelpPopup.HTML_GREEN + "><center>N</center></td><td bgcolor=#" + HelpPopup.HTML_GREEN + "><center>NE</center></td></tr>" + 
+               "<tr><td bgcolor=#" + HelpPopup.HTML_GREEN + "><center>W</center></td><td> </td><td bgcolor=#" + HelpPopup.HTML_GREEN + "><center>E</center></td></tr>" + 
+               "<tr><td bgcolor=#" + HelpPopup.HTML_GREEN + "><center>SW</center></td><td bgcolor=#" + HelpPopup.HTML_GREEN + "><center>S</center></td><td bgcolor=#" + HelpPopup.HTML_GREEN + "><center>SE</center></td></tr>" + 
+               "</table>" + 
+               "</center>";
+
     }
 }

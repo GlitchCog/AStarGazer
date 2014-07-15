@@ -76,7 +76,7 @@ public class MapGenerator implements GenerationScheme
                                        new GeneratorEllipse(), 
                                        new GeneratorLines(), 
                                        new GeneratorRandom(), 
-                                       new GeneratorMaze()
+                                       new GeneratorPerfectMaze()
                                       };
     }
 
