@@ -7,7 +7,7 @@ import javax.swing.JComboBox;
  * 
  * @author Matt Yanos
  */
-public class Dropdown extends JComboBox
+public class Dropdown extends JComboBox<Object>
 {
     private String label;
 

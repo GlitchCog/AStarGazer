@@ -101,11 +101,12 @@ public class GeneratorPerfectMaze extends MapGenerator
      */
     private void makePointsOdd(WeightedPoint p)
     {
-        if (p.getRow() % 2 != 1)
+        if (p.getRow() % 2 == 0)
         {
             p.setRow(p.getRow() + (p.getRow() > 0 ? -1 : 1));
         }
-        if (p.getCol() % 2 != 1)
+        
+        if (p.getCol() % 2 == 0)
         {
             p.setCol(p.getCol() + (p.getCol() > 0 ? -1 : 1));
         }
@@ -188,7 +189,7 @@ public class GeneratorPerfectMaze extends MapGenerator
      * @param cursor
      * @return whether there are any unvisited neighbor nodes
      */
-    private boolean anyUnvisitedNeighbors(MazeNode[][] maze, MazeNode cursor)
+    private static boolean anyUnvisitedNeighbors(MazeNode[][] maze, MazeNode cursor)
     {
         if (cursor.row > 0 && !maze[cursor.row - 1][cursor.col].visited)
             return true;
@@ -201,7 +202,7 @@ public class GeneratorPerfectMaze extends MapGenerator
         return false;
     }
 
-    private boolean anyUnvisited(MazeNode[][] maze)
+    private static boolean anyUnvisited(MazeNode[][] maze)
     {
         for (int r = 0; r < maze.length; r++)
             for (int c = 0; c < maze[r].length; c++)
@@ -216,7 +217,7 @@ public class GeneratorPerfectMaze extends MapGenerator
      * @param maze
      * @param map
      */
-    private void mazeToMap(MazeNode[][] maze, boolean[][] map)
+    private static void mazeToMap(MazeNode[][] maze, boolean[][] map)
     {
         int mazeRow, mazeCol;
         for (int r = 1; r < map.length - 1; r += 2)

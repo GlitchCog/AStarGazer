@@ -59,7 +59,7 @@ public class HelpPopup extends JDialog
                 if (node != null && node.getUserObject() != null)
                 {
                     String header = node.getUserObject().toString();
-                    String content = node instanceof HelpNode ? ((HelpNode)node).getHelpText() : header;
+                    String content = node.getHelpText();
                     contentPane.setText( formatHtml(header, content) );
                     contentPane.setCaretPosition(0);
                 }

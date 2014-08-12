@@ -46,7 +46,7 @@ public class GeneratorLines extends MapGenerator
             }
             else if (rnd.nextBoolean() && end < (vertical ? map.length / 5 : map[0].length / 5))
             {
-                end = vertical ? map.length - 2 : map[0].length - 2;;
+                end = vertical ? map.length - 2 : map[0].length - 2;
             }
 
             for (int j = beg; j < end; j++)
