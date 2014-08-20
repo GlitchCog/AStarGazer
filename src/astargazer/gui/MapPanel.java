@@ -520,8 +520,8 @@ public class MapPanel extends JPanel implements MouseInputListener, ComponentLis
     public void mousePressed(MouseEvent e)
     {
         setCursor(Cursor.getPredefinedCursor(Cursor.MOVE_CURSOR));
-        startOffsetX = (int)e.getX();
-        startOffsetY = (int)e.getY();
+        startOffsetX = e.getX();
+        startOffsetY = e.getY();
         tempOffsetX = offsetX;
         tempOffsetY = offsetY;
     }
@@ -548,20 +548,20 @@ public class MapPanel extends JPanel implements MouseInputListener, ComponentLis
     {
         if (getMapPixelWidth() < getWidth())
         {
-            offsetX = Math.min(getWidth() - getMapPixelWidth(), Math.max(tempOffsetX + (int)e.getX() - startOffsetX, 0));
+            offsetX = Math.min(getWidth() - getMapPixelWidth(), Math.max(tempOffsetX + e.getX() - startOffsetX, 0));
         }
         else
         {
-            offsetX = Math.min(0, Math.max(tempOffsetX + (int)e.getX() - startOffsetX, getWidth() - getMapPixelWidth()));
+            offsetX = Math.min(0, Math.max(tempOffsetX + e.getX() - startOffsetX, getWidth() - getMapPixelWidth()));
         }
 
         if (getHeight() > getMapPixelHeight())
         {
-            offsetY = Math.min(getHeight() - getMapPixelHeight(), Math.max(tempOffsetY + (int)e.getY() - startOffsetY, 0));
+            offsetY = Math.min(getHeight() - getMapPixelHeight(), Math.max(tempOffsetY + e.getY() - startOffsetY, 0));
         }
         else
         {
-            offsetY = Math.min(0, Math.max(tempOffsetY + (int)e.getY() - startOffsetY, getHeight() - getMapPixelHeight()));
+            offsetY = Math.min(0, Math.max(tempOffsetY + e.getY() - startOffsetY, getHeight() - getMapPixelHeight()));
         }
         repaint();
     }

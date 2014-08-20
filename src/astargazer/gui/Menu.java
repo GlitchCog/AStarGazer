@@ -11,7 +11,6 @@ import javax.swing.JComponent;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JSeparator;
 import javax.swing.KeyStroke;
 
 public class Menu extends JMenuBar
@@ -82,27 +81,25 @@ public class Menu extends JMenuBar
         window.getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(helpKeyStroke, "KEYCLICK");
         window.getRootPane().getActionMap().put("KEYCLICK", keyclickAction);
 
-        JMenu[] menus = new JMenu[MAIN_MENU_ITEMS.length];
+        final JMenu[] menus = new JMenu[MAIN_MENU_ITEMS.length];
 
-        JMenuItem jmi = null;
         for (int i = 0; i < MAIN_MENU_ITEMS.length; i++)
         {
             menus[i] = new JMenu(MAIN_MENU_ITEMS[i]);
             menus[i].setMnemonic(MAIN_MNOMONICS[i]);
+            
             for (int j = 0; j < MENU_OPTIONS[i].length; j++)
             {
-                if (MENU_OPTIONS[i][j].equals("")) // spacer
-                    menus[i].add(new JSeparator());
-                else
-                {
-                    jmi = new JMenuItem(MENU_OPTIONS[i][j].label);
-                    jmi.addActionListener(mal);
-                    jmi.setMnemonic(MENU_OPTIONS[i][j].mnemonic);
-                if (MENU_OPTIONS[i][j].accelerator != null)
-                        jmi.setAccelerator(MENU_OPTIONS[i][j].accelerator);
-                    menus[i].add(jmi); // add the submenu
-                }
+                final JMenuItem jmi = new JMenuItem(MENU_OPTIONS[i][j].label);
+                jmi.addActionListener(mal);
+                jmi.setMnemonic(MENU_OPTIONS[i][j].mnemonic);
+                
+                if (MENU_OPTIONS[i][j].accelerator != null) 
+                    jmi.setAccelerator(MENU_OPTIONS[i][j].accelerator);
+                
+                menus[i].add(jmi); // add the submenu
             }
+            
             add(menus[i]); // add the menu
         }
     }

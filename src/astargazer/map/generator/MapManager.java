@@ -16,6 +16,11 @@ public class MapManager
      * The stored seed for map generation, initialized to some random value and incremented when the generate button is pressed
      */
     private int mapSeed = new Random().nextInt(10000);
+    
+    /**
+     * The single permitted instance of this class
+     */
+    private static final MapManager onlyOne = new MapManager();
 
     // Minimum and maximum tile map dimensions
     private static final int MIN_HEIGHT = 30;
@@ -29,14 +34,9 @@ public class MapManager
     private Random rnd;
 
     /**
-     * The single permitted instance of this class
-     */
-    private static MapManager onlyOne;
-
-    /**
      * Holds the implementation of the map generator scheme that is currently being used
      */
-    private static MapGenerator generator;
+    private MapGenerator generator = new MapGenerator();
 
     /**
      * Private default constructor
@@ -44,7 +44,6 @@ public class MapManager
     private MapManager()
     {
         this.rnd = new Random(mapSeed);
-        this.generator = new MapGenerator();
     }
 
     /**
@@ -55,10 +54,6 @@ public class MapManager
      */
     public static MapManager getInstance()
     {
-        if (onlyOne == null)
-        {
-            onlyOne = new MapManager();
-        }
         return onlyOne;
     }
 
