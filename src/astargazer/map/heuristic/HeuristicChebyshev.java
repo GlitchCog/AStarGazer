@@ -10,7 +10,8 @@ public class HeuristicChebyshev extends HeuristicScheme
     {
         int dx = Math.abs(one.getRow() - two.getRow());
         int dy = Math.abs(one.getCol() - two.getCol());
-        return Math.max(dx, dy);
+        float d = (float)Math.sqrt(dx * dx + dy * dy);
+        return d * Math.max(dx, dy);
     }
 
     @Override
