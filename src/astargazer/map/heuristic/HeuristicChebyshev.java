@@ -22,14 +22,14 @@ public class HeuristicChebyshev extends HeuristicScheme
     @Override
     public String getExplanation()
     {
-    	return "Chebyshev distance considers the movement on both axis " +
-    		   "and takes the maximum between the two differences. This " +
-    		   "heuristic can be paired with the 8-directional neighbor.<br /> " +
-    		   "To visualize the usefulness of this heuristic imagine a " +
-    		   "claw machine. While you're moving in one direction you can " + 
-    		   "simultaneously move in the other direction at no cost in time " +
-    		   "(unless you move more in this direction, which makes this the max).<br />" +
-    		   "Sometimes in poorly programmed video games you notice that your " + 
+        return "Chebyshev distance considers the movement on both axis " +
+               "and takes the maximum between the two differences. This " +
+               "heuristic can be paired with the 8-directional neighbor.<br /> " +
+               "To visualize the usefulness of this heuristic imagine a " +
+               "claw machine. While you're moving in one direction you can " + 
+               "simultaneously move in the other direction at no cost in time " +
+               "(unless you move more in this direction, which makes this the max).<br />" +
+               "Sometimes in poorly programmed video games you notice that your " + 
                "character can move faster on the diagonal. This is because the " + 
                "motion is working in Chebyshev-space, but the world map you're " + 
                "running around on is in Euclidean space. Say the character has " + 
