@@ -153,31 +153,33 @@ public class ColorScheme
                                                                      Color.WHITE,                   // goal
                                                                      Color.BLACK);                  // goalBorder
 
+    public static final ColorScheme CUSTOM_SCHEME = new ColorScheme("Custom", DEFAULT_SCHEME);
+
     public static final ColorScheme[] SCHEMES = {DEFAULT_SCHEME, INVERTED_SCHEME, GRASS_SCHEME, WATER_SCHEME, FIRE_SCHEME, ICE_SCHEME, TRON_SCHEME, GRAYSCALE_SCHEME};
 
     public final String name;
 
-    public final Color background;
+    private Color background;
 
-    public final Color blockHighlight;
-    public final Color block;
-    public final Color blockShadow;
+    private Color blockHighlight;
+    private Color block;
+    private Color blockShadow;
 
-    public final Color cursor;
+    private Color cursor;
 
-    public final Color open;
-    public final Color openBorder;
-    public final Color closed;
-    public final Color closedBorder;
+    private Color open;
+    private Color openBorder;
+    private Color closed;
+    private Color closedBorder;
 
-    public final Color text;
-    public final Color grid;
-    public final Color path;
+    private Color text;
+    private Color grid;
+    private Color path;
 
-    public final Color start;
-    public final Color startBorder;
-    public final Color goal;
-    public final Color goalBorder;
+    private Color start;
+    private Color startBorder;
+    private Color goal;
+    private Color goalBorder;
 
     private ColorScheme(String name, 
                         Color background, 
@@ -222,8 +224,116 @@ public class ColorScheme
         this.goalBorder = goalBorder;
     }
 
+    public ColorScheme(String name, ColorScheme copy)
+    {
+        this.name = name;
+
+        this.background = copy.background;
+
+        this.blockHighlight = copy.blockHighlight;
+        this.block = copy.block;
+        this.blockShadow = copy.blockShadow;
+
+        this.cursor = copy.cursor;
+
+        this.open = copy.open;
+        this.openBorder = copy.openBorder;
+        this.closed = copy.closed;
+        this.closedBorder = copy.closedBorder;
+
+        this.text = copy.text;
+        this.grid = copy.grid;
+
+        this.path = copy.path;
+        this.start = copy.start;
+        this.startBorder = copy.startBorder;
+        this.goal = copy.goal;
+        this.goalBorder = copy.goalBorder;
+    }
+
     public String toString()
     {
         return name;
     }
+
+    public Color getBackground()
+    {
+        return background;
+    }
+
+    public Color getBlockHighlight()
+    {
+        return blockHighlight;
+    }
+
+    public Color getBlock()
+    {
+        return block;
+    }
+
+    public Color getBlockShadow()
+    {
+        return blockShadow;
+    }
+
+    public Color getCursor()
+    {
+        return cursor;
+    }
+
+    public Color getOpen()
+    {
+        return open;
+    }
+
+    public Color getOpenBorder()
+    {
+        return openBorder;
+    }
+
+    public Color getClosed()
+    {
+        return closed;
+    }
+
+    public Color getClosedBorder()
+    {
+        return closedBorder;
+    }
+
+    public Color getText()
+    {
+        return text;
+    }
+
+    public Color getGrid()
+    {
+        return grid;
+    }
+
+    public Color getPath()
+    {
+        return path;
+    }
+
+    public Color getStart()
+    {
+       return start;
+    }
+
+    public Color getStartBorder()
+    {
+        return startBorder;
+    }
+
+    public Color getGoal()
+    {
+        return goal;
+    }
+
+    public Color getGoalBorder()
+    {
+        return goalBorder;
+    }
+
 }
