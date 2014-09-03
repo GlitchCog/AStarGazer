@@ -21,4 +21,10 @@ public class HeuristicEuclidean extends HeuristicScheme
         return "Euclidean";
     }
 
+    @Override
+    public String getExplanation()
+    {
+        return "This is normal distance calculated by the Pythagorean formula:<br />" + 
+               "d = sqrt( (a<sub>x</sub> - b<sub>x</sub>)<sup>2</sup> + (a<sub>y</sub> - b<sub>y</sub>)<sup>2</sup> )";
+    }
 }

@@ -1,4 +1,4 @@
-package astargazer.gui;
+package astargazer.gui.component;
 
 import javax.swing.JComboBox;
 
@@ -7,7 +7,7 @@ import javax.swing.JComboBox;
  * 
  * @author Matt Yanos
  */
-public class Dropdown extends JComboBox
+public class Dropdown extends JComboBox<Object>
 {
     private String label;
 

@@ -17,14 +17,17 @@ import javax.swing.event.ChangeListener;
 
 import astargazer.PathFinder;
 import astargazer.StatusEnum;
-import astargazer.map.MapGenerator;
-import astargazer.map.heuristic.HeuristicEuclidean;
-import astargazer.map.heuristic.HeuristicManhattan;
+import astargazer.gui.component.ButtonPanel;
+import astargazer.gui.component.CheckboxPanel;
+import astargazer.gui.component.Dropdown;
+import astargazer.gui.component.DropdownPanel;
+import astargazer.gui.component.InfoPanel;
+import astargazer.gui.component.Slider;
+import astargazer.gui.component.SliderPanel;
+import astargazer.map.generator.MapGenerator;
+import astargazer.map.generator.MapManager;
+import astargazer.map.TileMap;
 import astargazer.map.heuristic.HeuristicScheme;
-import astargazer.map.heuristic.HeuristicSquared;
-import astargazer.map.neighbor.NeighborEightDirections;
-import astargazer.map.neighbor.NeighborFourDirections;
-import astargazer.map.neighbor.NeighborJumpPoint;
 import astargazer.map.neighbor.NeighborSelector;
 
 /**
@@ -52,13 +55,20 @@ public class ToolboxPanel extends JPanel
     private final String DROPDOWN_TEXT_HEURISTICS = "Heuristics";
     private final String DROPDOWN_TEXT_NEIGHBORS = "Neighbors";
     private final String DROPDOWN_TEXT_COLORS = "Colors";
+    private final String DROPDOWN_TEXT_OBSTACLES = "Obstacles";
 
     private final String SLIDER_TEXT_SPEED = "Solve Delay";
     private final String SLIDER_TEXT_SIZE = "Zoom";
 
-    private final String CHECKBOX_TEXT_OBSTACLES = "Generate Obstacles";
     private final String CHECKBOX_TEXT_DIJKSTRA = "Full Dijkstra Search (h=0)";
     private final String CHECKBOX_TEXT_RANDOMIZE = "Randomize Equicost Nodes";
+    private final String CHECKBOX_TEXT_GRID = "Show Grid";
+    private final String CHECKBOX_TEXT_SWAP = "Swap Start and Goal Points";
+
+    /**
+     * The slider to zoom in or out of the map panel, made a member so the scroll wheel listener can modify it
+     */
+    private Slider zoomSlider;
 
     /**
      * Timer to increment the steps in the algorithm
@@ -110,9 +120,10 @@ public class ToolboxPanel extends JPanel
     {
         setLayout(new GridBagLayout());
 
-        GridBagConstraints gbc = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(12, 12, 12, 12), 0, 0);
+        GridBagConstraints gbc = new GridBagConstraints(0, 0, 1, 1, 0.0, 0.0, GridBagConstraints.CENTER, GridBagConstraints.NONE, new Insets(8, 8, 8, 8), 0, 0);
 
         ActionListener al = new ActionListener() {
+            @Override
             public void actionPerformed( ActionEvent e )
             {
                 if (BUTTON_TEXT_GENERATE.equals( ((JButton)e.getSource()).getText()) )
@@ -163,9 +174,10 @@ public class ToolboxPanel extends JPanel
             }
         });
 
-        Dropdown[] dropdowns = new Dropdown[3];
+        Dropdown[] dropdowns = new Dropdown[4];
 
         ActionListener dal = new ActionListener() {
+            @Override
             public void actionPerformed( ActionEvent e )
             {
                 Dropdown d = ((Dropdown)e.getSource());
@@ -182,12 +194,18 @@ public class ToolboxPanel extends JPanel
                     mp.setColorScheme((ColorScheme)d.getSelectedItem());
                     mp.updateDrawing();
                 }
+                else if (DROPDOWN_TEXT_OBSTACLES.equals(d.getLabel()))
+                {
+                    MapManager.getInstance().setGenerator((MapGenerator)d.getSelectedItem());
+                    regenerateMap(false);
+                }
             }
         };
 
-        dropdowns[0] = new Dropdown(DROPDOWN_TEXT_HEURISTICS, new HeuristicScheme[] {new HeuristicManhattan(), new HeuristicEuclidean(), new HeuristicSquared()});
-        dropdowns[1] = new Dropdown(DROPDOWN_TEXT_NEIGHBORS, new NeighborSelector[] {new NeighborFourDirections(), new NeighborEightDirections(), new NeighborJumpPoint()});
+        dropdowns[0] = new Dropdown(DROPDOWN_TEXT_HEURISTICS, HeuristicScheme.getAllHeuristics() );
+        dropdowns[1] = new Dropdown(DROPDOWN_TEXT_NEIGHBORS, NeighborSelector.getAllNeighborSelectors() );
         dropdowns[2] = new Dropdown(DROPDOWN_TEXT_COLORS, ColorScheme.SCHEMES);
+        dropdowns[3] = new Dropdown(DROPDOWN_TEXT_OBSTACLES, MapGenerator.getAllGenerators() );
 
         dropdownPanel = new DropdownPanel(dropdowns, dal);
 
@@ -208,13 +226,15 @@ public class ToolboxPanel extends JPanel
                 else if (SLIDER_TEXT_SIZE.equals(s.getLabel()))
                 {
                     mp.setTileSize(s.getValue());
+                    mp.enforceBoundaries();
                     mp.updateDrawing();
                 }
             }
         };
 
         sliders[0] = new Slider(SLIDER_TEXT_SPEED, 0, 1000, 0);
-        sliders[1] = new Slider(SLIDER_TEXT_SIZE, 10, 32, 16);
+        zoomSlider = new Slider(SLIDER_TEXT_SIZE, 10, 32, 16);
+        sliders[1] = zoomSlider;
 
         setSolveDelay(sliders[0].getValue());
         mp.setTileSize(sliders[1].getValue());
@@ -226,14 +246,7 @@ public class ToolboxPanel extends JPanel
             public void itemStateChanged(ItemEvent e)
             {
                 JCheckBox cb = (JCheckBox)e.getSource();
-                if (CHECKBOX_TEXT_OBSTACLES.equals(cb.getText()))
-                {
-                    MapGenerator.getInstance().setObstacles(cb.isSelected());
-                    regenerateMap(false);
-                    mp.updateDrawing();
-                    infoPanel.updateStats(pf);
-                }
-                else if (CHECKBOX_TEXT_DIJKSTRA.equals(cb.getText()))
+                if (CHECKBOX_TEXT_DIJKSTRA.equals(cb.getText()))
                 {
                     pf.setDijkstra(cb.isSelected());
                 }
@@ -241,12 +254,24 @@ public class ToolboxPanel extends JPanel
                 {
                     pf.setShuffle(cb.isSelected());
                 }
+                else if (CHECKBOX_TEXT_GRID.equals(cb.getText()))
+                {
+                    mp.setDisplayGrid(cb.isSelected());
+                    mp.updateDrawing();
+                }
+                else if (CHECKBOX_TEXT_SWAP.equals(cb.getText()))
+                {
+                    TileMap.setEndPointSwap(cb.isSelected());
+                    mp.updateDrawing();
+                }
             }
         };
 
-        checkboxPanel = new CheckboxPanel(new String[] {CHECKBOX_TEXT_OBSTACLES, 
-                                                        CHECKBOX_TEXT_DIJKSTRA, 
-                                                        CHECKBOX_TEXT_RANDOMIZE}, il);
+        checkboxPanel = new CheckboxPanel(new String[] {CHECKBOX_TEXT_DIJKSTRA, 
+                                                        CHECKBOX_TEXT_RANDOMIZE, 
+                                                        CHECKBOX_TEXT_GRID, 
+                                                        CHECKBOX_TEXT_SWAP}, 
+                                                        il);
 
         infoPanel = new InfoPanel(pf);
 
@@ -283,7 +308,36 @@ public class ToolboxPanel extends JPanel
      */
     private void regenerateMap(boolean reseed)
     {
-        pf.reset(MapGenerator.getInstance().generate(reseed));
+        pf.reset(MapManager.getInstance().generate(reseed));
+        mp.centerMap();
+        mp.updateDrawing();
+        infoPanel.updateStats(pf);
+    }
+
+    /**
+     * Randomly generate a tilemap using the specified random number generator seed
+     * 
+     * @param seed
+     */
+    public void regenerateMap(int seed)
+    {
+        pf.reset(MapManager.getInstance().generate(seed));
+        mp.updateDrawing();
+        infoPanel.updateStats(pf);
+    }
+
+    /**
+     * Increment the zoom
+     * 
+     * @param amt
+     */
+    public void incrementZoom(int amt)
+    {
+        int newValue = zoomSlider.getValue() + amt;
+        if (newValue >= zoomSlider.getMinimum() && newValue <= zoomSlider.getMaximum())
+        {
+            zoomSlider.setValue(newValue);
+        }
     }
 
 }

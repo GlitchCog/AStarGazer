@@ -2,8 +2,10 @@ package astargazer.map.neighbor;
 
 import java.util.List;
 
+import astargazer.gui.HelpPopup;
 import astargazer.map.WeightedPoint;
 import astargazer.map.TileMap;
+import astargazer.map.heuristic.HeuristicScheme;
 
 /**
  * Neighbor selector that returns all eight adjacent tiles: N, S, E, W, NE, SE, NW, SW
@@ -13,9 +15,9 @@ import astargazer.map.TileMap;
 public class NeighborEightDirections extends NeighborSelector
 {
     @Override
-    public List<WeightedPoint> getNeighbors(TileMap map, WeightedPoint cursor)
+    public List<WeightedPoint> getNeighbors(TileMap map, WeightedPoint cursor, HeuristicScheme distanceCalculator)
     {
-        List<WeightedPoint> neighbors = (new NeighborFourDirections()).getNeighbors(map, cursor);
+        List<WeightedPoint> neighbors = (new NeighborFourDirections()).getNeighbors(map, cursor, distanceCalculator);
 
         // If the neighbor is not out of bounds and that the neighbor is traversable, then add it to the list
         if (cursor.getRow() > 0 && map.isTraversable(cursor.getRow() - 1, cursor.getCol() - 1) )
@@ -42,5 +44,24 @@ public class NeighborEightDirections extends NeighborSelector
     public String getLabel()
     {
         return "8-Directional";
+    }
+
+    @Override
+    public String getExplanation()
+    {
+        return "Neighbors are selected from diagonally adjacent tiles in " + 
+               "addition to the north, east, south, and west directions. " + 
+               "This works best with the Euclidean heuristic. Combining " + 
+               "this neighbor selection scheme with the Manhattan " + 
+               "heuristic can yield strange results because a diagonal " + 
+               "path over a single tile is counted as a distance of 2.<br><br>" + 
+               "<center>" + 
+               "<table border=1>" + 
+               "<tr><td bgcolor=#" + HelpPopup.HTML_GREEN + "><center>NW</center></td><td bgcolor=#" + HelpPopup.HTML_GREEN + "><center>N</center></td><td bgcolor=#" + HelpPopup.HTML_GREEN + "><center>NE</center></td></tr>" + 
+               "<tr><td bgcolor=#" + HelpPopup.HTML_GREEN + "><center>W</center></td><td> </td><td bgcolor=#" + HelpPopup.HTML_GREEN + "><center>E</center></td></tr>" + 
+               "<tr><td bgcolor=#" + HelpPopup.HTML_GREEN + "><center>SW</center></td><td bgcolor=#" + HelpPopup.HTML_GREEN + "><center>S</center></td><td bgcolor=#" + HelpPopup.HTML_GREEN + "><center>SE</center></td></tr>" + 
+               "</table>" + 
+               "</center>";
+
     }
 }

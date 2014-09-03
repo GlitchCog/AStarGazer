@@ -1,0 +1,213 @@
+AStarGazer
+==========
+
+AStarGazer is a program for visualizing the A* search algorithm on a tile map.
+
+The A* search algorithm (en.wikipedia.org/wiki/A_Star_Search_Algorithm) is 
+used to traverse a connection of nodes, called a graph. This implementation 
+uses it to find a path between a starting point and a goal point on a two-
+dimensional grid, a problem often encountered in tile-based video game AI. It 
+also displays the inner workings of the algorithm by coloring the open and 
+closed sets of nodes on the map and drawing a line representing the current 
+path being investigated.
+
+Open set - The collection of nodes that have yet to be investigated
+
+Closed set - The collection of nodes that have already been investigated
+
+Heuristic - The method for calculating the cost of a node
+
+Neighbor Selection - The method for determining which nodes can be reached from 
+the current node
+
+With each step, neighboring nodes are selected for analysis. If a neighbor is 
+considered a valid move, its cost is calculated. The cost (f) is the sum of two 
+parts: 
+
+1) the cost already spent to get to the current node (g), which is the current 
+location's cost plus whatever incremental cost is required to get to the 
+neighboring node; and
+2) the estimated cost (h) to get to the goal.
+
+All these neighbors are added to the open set, which is the collection of nodes 
+to be investigated, and the current location is added to the closed set, as it 
+has already been analyzed. From all the points stored on the open set, the one 
+with the lowest cost is investigated next.  The A* search algorithm can be used 
+to search through graphs that are not representations of physical space. A 
+common example is the sliding number puzzle where 8 or 15 numbers are stored in 
+a square grid. The numbers can be moved using the single empty spot, and each 
+arrangement of puzzle pieces can be considered a node in the graph with an 
+associated heuristic of the number of moves taken so far added to the estimated 
+distance the numbers are from their ordered locations. 
+
+Usage Instructions:
+
+Step - Moves the algorithm forward one step. A step is defined as popping the 
+       minimum cost node from the open set, analyzing its cost with a 
+       heuristic, and adding its valid neighbors to the open set.
+
+Solve - Continues to step until the algorithm is complete.
+
+Reset - Resets the algorithm to its initial state to be re-run.
+
+Generate - Generates a new random map and start and goal points.
+
+Heuristics - Select which heuristic to use, meaning how the distance between 
+             two points should be evaluated in the algorithm.
+
+    Manhattan - Manhattan (or Taxicab) distance only permits traveling along 
+                the x and y axes, so the distance between (0, 0) and (1, 1) is 
+                2 from traveling along the X axis 1 unit and then up the Y 
+                axis 1 unit, and not the hypotenuse, which would be sqrt(2)/2. 
+                It's so named because in a city you're bound to the streets. 
+                You can't cut diagonally through a building to go north/south 
+                one block and east/west one block.
+    Chebyshev - Chebyshev distance considers a diagonal move on a grid equal to 
+                a move along an axis. This heuristic should be paired with the 
+                8-directional neighbor selection scheme.
+                Sometimes in poorly programmed video games you notice that your 
+                character can move faster on the diagonal. This is because the 
+                motion is working in Chebyshev-space, but the world map you're 
+                running around on is in Euclidean space. Say the character has 
+                a set speed of one unit per update cycle. The up and the left 
+                buttons are pressed on the controller simultaneously, so the 
+                character moves up one unit and left one unit. The effect on 
+                the screen in Euclidean space is that the character gets a 
+                speed boost. The character should have been limited to one unit 
+                of motion, but by moving in two dimensions at once, the 
+                character traveled sqrt(2)/2 units in one update. In Chebyshev 
+                space these movements are considered equal, and the discrepancy 
+                between the Euclidean space of the game world and the Chebyshev 
+                space of the poorly chosen input scheme betray this. 
+    Euclidean - This is normal distance calculated by the Pythagorean formula: 
+                d = sqrt((a_x-b_x)^2+(a_y-b_y)^2)
+    Euclidean Squared - This heuristic is an optimized version of the 
+                Euclidean heuristic. It is the normal distance formula, but 
+                without taking the square root. Because the distance is only 
+                used to compare, comparing the squares of two values still 
+                works to determine which path is shorter. Is does weight the 
+                from-cost (g) much less than the to-cost (h) because the from-
+                cost is added up incrementally while the to-cost is calculated 
+                in one big piece. This is caused because the distance between 
+                the start and the cursor is many very small steps squared 
+                individually before being added up (often just 1, which is not 
+                increased by being squared at all) so the Euclidean squared 
+                heuristic is much greedier about getting to its goal. 
+                Sometimes this imbalance will cause it to select a less 
+                optimal path closer to the start in favor of a better path 
+                closer to the goal.
+
+Neighbors - Select the method by which neighboring tiles are selected.
+
+    4-directional - Neighbors are selected from the traversable tiles to the 
+                    north, east, south, and west only. This works best with 
+                    the Manhattan heuristic.
+    8-directional - Neighbors are selected from diagonally adjacent tiles in 
+                    addition to the north, east, south, and west directions. 
+                    This works best with the Euclidean heuristic. Combining 
+                    this neighbor selection scheme with the Manhattan 
+                    heuristic can yield strange results because a diagonal 
+                    path over a single tile is counted as a distance of 2.
+    Jump Point -    Neighbors are selected by extending rays out from the 
+                    current tile until an obstacle or the goal is hit. These 
+                    tiles are "neighbors" in the sense that they are to be 
+                    used in the next step of the algorithm, but are not 
+                    necessarily adjacent.
+
+Colors - Select a color scheme for the map panel.
+
+Obstacles - Select the type of obstacles to place on the tile map.
+
+    Blocks - Rectangular blocks will be randomly placed in the map.
+
+    Rounded Edges - The same rectangular blocks will be placed in the map, 
+                    but their edges will be rounded off for an organic feel.
+
+    Lines - A series of vertical or horizontal lines will be placed in the map 
+                    with a chance of one or two perpendicular lines as well.
+
+    Random Points - Many single randomly selected tiles will be marked as 
+                    non-traversable in the map.
+
+    Maze - A maze will be generated using the recursive backtracker maze 
+                    generation method.
+
+Solve Delay - How long the solve process wait before running the next step.
+
+Zoom - Zoom in and out of the map panel.
+
+Full Dijkstra Search (h=0) - This option sets the h value to zero, meaning 
+                     there is no incentive for the algorithm to select a good 
+                     path to test first. It treats all points equally in terms 
+                     of how far is left to travel. This converts the A* search 
+                     algorithm into the more generalized Dijkstra's algorithm.
+
+Randomize Equicost Nodes - Selecting this option will shuffle the neighboring 
+                     points before they are sorted prior to being pushed onto 
+                     the open set. One feature of the Manhattan heuristic is 
+                     that on a full grid it doesn't matter when you choose to 
+                     go along the X axis and when you choose to go along the Y 
+                     axis. You could travel only in the Y direction until you 
+                     were at the correct row, and then travel only in the X 
+                     direction until you reach your destination. Alternatively 
+                     you could zigzag with every step. The distance traveled 
+                     is the same in both cases. This means that there are lots 
+                     of equidistant paths to decide between when using a 
+                     Manhattan heuristic. The decision to try one direction 
+                     instead of another frequently becomes a factor of which 
+                     is added to the set first, and the sort will just leave 
+                     equal cost nodes in their original ordering. Randomizing 
+                     them will prevent the heuristic from favoring one 
+                     direction simply because tiles in that direction are 
+                     added to the set before tiles in another direction.
+
+Show Grid - This option determines whether to display the tile grid on the map
+
+Seed Map Generator - Selecting this option from the File menu will permit you 
+                     to specify a seed value for the random number generator 
+                     that builds the tile maps. You can enter an integer to use 
+                     or a unique integer can be generated using text you enter. 
+                     Seeds are your keys to revisiting maps as each key will 
+                     regenerate the same unique map each time it is used as the 
+                     seed.
+
+Seed values for notable maps (for Block type obstacles):
+
+Randomizing equicost nodes can dramatically affect the route in these maps:
+1260, 1275
+
+Maps that take the algorithm a lot of computation to traverse:
+485, 759, 769, 1178, 1271, 2264, 733, 1124, 1616, 3850
+
+These maps show off the distinction between the Euclidean and the Euclidean 
+squared heuristics well:
+264, 393, 747, 1115, 7478, 3902
+
+There is a race effect between multiple routes when using some heuristics in 
+these maps, especially with the full Dijkstra search enabled:
+534, 804, 1503, 1626, 1881, 2509, 1069, 1305, 2241, 2986
+
+These maps feature drastic shortcuts when a neighbor selection scheme that 
+permits diagonal traversal, like the 8-directional scheme, is used:
+824, 1142, 1531, 2013, 2065, 2168, 2376, 2546, 3019, 3161, 3657, 3819, 3911, 
+6206
+
+Finding a route in these maps is only possible for a neighbor selection scheme 
+that permits diagonal traversal, like the 8-directional scheme:
+527, 796, 1010, 1277, 1304, 1355, 1384, 1737, 1868, 2000, 2142, 2272, 2346, 
+2430, 2602, 2677, 2704, 2812, 3012, 3030, 3287, 3468, 3763, 3898
+
+Trivial maps where the start and goal are on the same point:
+2203, 2517
+
+These maps aren't especially unique, but feature interesting solutions:
+ 172,  185,  235,  259,  364,  378,  388,  402,  466,  468,  484,  596,  674, 
+ 694,  709,  713,  719,  742,  756,  760,  763,  782,  791,  814,  858,  863, 
+ 885,  937, 1163, 1234, 1377, 1403, 1469, 1570, 1597, 1614, 1619, 1623, 1628, 
+1629, 1633, 1645, 1650, 1678, 1686, 1705, 1786, 1788, 1810, 1812, 1842, 1983, 
+2006, 2038, 2145, 2172, 2219, 2234, 2243, 2256, 2292, 2308, 2317, 2348, 2367, 
+2434, 2439, 2558, 2559, 2588, 2639, 2673, 2707, 2711, 2718, 2725, 2770, 2773, 
+2782, 2841, 2904, 2930, 2934, 2962, 2963, 2973, 3051, 3110, 3171, 3270, 3278, 
+3348, 3417, 3451, 3462, 3479, 3481, 3489, 3507, 3518, 3542, 3551, 3658, 3670, 
+3686, 3690, 3711, 3736, 3758, 3767, 3892, 3907, 3912, 3944, 3952, 3980, 3982, 
+3988, 4004

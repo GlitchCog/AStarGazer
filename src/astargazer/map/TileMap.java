@@ -25,15 +25,26 @@ public class TileMap
     private WeightedPoint goal;
 
     /**
+     * The seed used on the random number generator to build this map
+     */
+    private final int seed;
+
+    /**
+     * Whether the start and goal points are swapped
+     */
+    private static boolean endPointSwap = false;
+
+    /**
      * Construct a TileMap with the specified boolean map of TRUE non-traversable tiles
      * 
      * @param map
      */
-    public TileMap(boolean[][] map, WeightedPoint start, WeightedPoint goal)
+    public TileMap(boolean[][] map, WeightedPoint start, WeightedPoint goal, int seed)
     {
         this.map = map;
         this.start = start;
         this.goal = goal;
+        this.seed = seed;
     }
 
     /**
@@ -41,8 +52,9 @@ public class TileMap
      * 
      * @param imap
      */
-    public TileMap(int[][] imap)
+    public TileMap(int[][] imap, int seed)
     {
+        this.seed = seed;
         map = new boolean[imap.length][imap[0].length];
         for (int r = 0; r < imap.length; r++)
         {
@@ -60,17 +72,7 @@ public class TileMap
      */
     public WeightedPoint getStart()
     {
-        return start;
-    }
-
-    /**
-     * Set the starting point for this tile map
-     * 
-     * @param start
-     */
-    public void setStart(WeightedPoint start)
-    {
-        this.start = start;
+        return TileMap.endPointSwap ? goal : start;
     }
 
     /**
@@ -80,25 +82,34 @@ public class TileMap
      */
     public WeightedPoint getGoal()
     {
-        return goal;
+        return TileMap.endPointSwap ? start : goal;
     }
 
     /**
-     * Set the goal point for this tile map
+     * Get the seed used on the random number generator to build this map
      * 
-     * @param goal
+     * @return seed
      */
-    public void setGoal(WeightedPoint goal)
+    public final int getSeed()
     {
-        this.goal = goal;
+        return seed;
+    }
+
+    /**
+     * Set whether the end points should be swapped
+     * 
+     * @param endPointSwap
+     */
+    public static void setEndPointSwap(boolean endPointSwap)
+    {
+        TileMap.endPointSwap = endPointSwap;
     }
 
     /**
      * Whether the point is a traversable point on this tile map
      * 
      * @param wp the point to check
-     * @return
-     *         traversable
+     * @return traversable
      */
     public boolean isTraversable(WeightedPoint wp)
     {
@@ -110,7 +121,7 @@ public class TileMap
      * 
      * @param row
      * @param col
-     * @return
+     * @return traversable
      */
     public boolean isTraversable(int row, int col)
     {
@@ -132,7 +143,7 @@ public class TileMap
     /**
      * Get the number of rows
      * 
-     * @return
+     * @return number of rows
      */
     public int getRows()
     {
@@ -142,11 +153,21 @@ public class TileMap
     /**
      * Get the number of columns
      * 
-     * @return
+     * @return number of columns
      */
     public int getCols()
     {
         return map[0].length;
+    }
+
+    /**
+     * Get the map statistics to be displayed on the status bar
+     * 
+     * @return map statistics
+     */
+    public String getMapStats()
+    {
+        return "Seed:" + seed + "   w:" + getCols() + " h:" + getRows() + "   Start:" + start.toString() + ", Goal:" + goal.toString();
     }
 
 }

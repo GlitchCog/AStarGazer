@@ -3,8 +3,10 @@ package astargazer.map.neighbor;
 import java.util.ArrayList;
 import java.util.List;
 
+import astargazer.gui.HelpPopup;
 import astargazer.map.WeightedPoint;
 import astargazer.map.TileMap;
+import astargazer.map.heuristic.HeuristicScheme;
 
 /**
  * Neighbor selector that returns adjacent tiles excluding diagonal moves: N, S, E, W
@@ -14,7 +16,7 @@ import astargazer.map.TileMap;
 public class NeighborFourDirections extends NeighborSelector
 {
     @Override
-    public List<WeightedPoint> getNeighbors(TileMap map, WeightedPoint cursor)
+    public List<WeightedPoint> getNeighbors(TileMap map, WeightedPoint cursor, HeuristicScheme distanceCalculator)
     {
         List<WeightedPoint> neighbors = new ArrayList<WeightedPoint>();
 
@@ -43,5 +45,18 @@ public class NeighborFourDirections extends NeighborSelector
     public String getLabel()
     {
         return "4-directional";
+    }
+
+    @Override
+    public String getExplanation()
+    {
+        return "Neighbors are selected from the traversable tiles to the north, east, south, and west only. This works best with the Manhattan heuristic.<br><br>" +
+               "<center>" + 
+               "<table border=1>" + 
+               "<tr><td bgcolor=#" + HelpPopup.HTML_RED + "> </td><td bgcolor=#" + HelpPopup.HTML_GREEN + "><center>N</center></td><td bgcolor=#" + HelpPopup.HTML_RED + ">< </td></tr>" + 
+               "<tr><td bgcolor=#" + HelpPopup.HTML_GREEN + "><center>W</center></td><td bgcolor=#ffffff> </td><td bgcolor=#" + HelpPopup.HTML_GREEN + "><center>E</center></td></tr>" + 
+               "<tr><td bgcolor=#" + HelpPopup.HTML_RED + "> </td><td bgcolor=#" + HelpPopup.HTML_GREEN + "><center>S</center></td><td bgcolor=#" + HelpPopup.HTML_RED + ">< </td></tr>" + 
+               "</table>" + 
+               "</center>";
     }
 }

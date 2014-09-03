@@ -1,4 +1,4 @@
-package astargazer.gui;
+package astargazer.gui.component;
 
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -39,7 +39,7 @@ public class InfoPanel extends JPanel
         super(new GridBagLayout());
         formatter = new DecimalFormat("00.00");
         info = new JLabel("Info", JLabel.LEFT);
-        info.setFont(new Font(Font.MONOSPACED, Font.BOLD, 13));
+        info.setFont(new Font(Font.MONOSPACED, Font.BOLD, 12));
         add(info, new GridBagConstraints(0, 0, 1, 1, 1.0, 1.0, 
                                          GridBagConstraints.NORTHWEST, 
                                          GridBagConstraints.HORIZONTAL, 

@@ -71,6 +71,12 @@ public class PathFinder
     private boolean shuffle;
 
     /**
+     * Whether the initial step of the algorithm has been taken, 
+     * used to set the tail node and push the start onto the open set
+     */
+    private boolean initialStep;
+
+    /**
      * Get the Map
      * 
      * @return the map
@@ -108,6 +114,14 @@ public class PathFinder
     public WeightedPoint getCursor()
     {
         return cursor;
+    }
+
+    /**
+     * Get the seed that generated the current map
+     */
+    public int getSeed()
+    {
+        return map.getSeed();
     }
 
     /**
@@ -217,15 +231,14 @@ public class PathFinder
 
         this.cursor = null;
 
-        this.tail = map.getStart();
-
         this.heuristic = heuristic;
         this.neighborSelector = neighborSelector;
+
+        this.initialStep = true;
 
         this.status = StatusEnum.RUNNING;
 
         this.openSet = new Heap<WeightedPoint>();
-        this.openSet.push(map.getStart());
         this.closedSet = new HashSet<WeightedPoint>();
     }
 
@@ -248,6 +261,13 @@ public class PathFinder
      */
     private StatusEnum stepInternal()
     {
+        if (initialStep)
+        {
+            this.tail = map.getStart();
+            this.openSet.push(map.getStart());
+            initialStep = false;
+        }
+
         if (status != StatusEnum.RUNNING)
             return status;
 
@@ -279,7 +299,7 @@ public class PathFinder
         closedSet.add(cursor);
 
         // Get the list of neighboring points
-        List<WeightedPoint> neighbors = neighborSelector.getNeighbors(map, cursor);
+        List<WeightedPoint> neighbors = neighborSelector.getNeighbors(map, cursor, heuristic);
 
         // Link the neighbors to the cursor (for backtracking the path when the goal is reached) and calculate their weight
         for (WeightedPoint wp : neighbors)
