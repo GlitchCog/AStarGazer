@@ -44,6 +44,6 @@ public abstract class HeuristicScheme
      */
     public static HeuristicScheme[] getAllHeuristics()
     {
-        return new HeuristicScheme[] {new HeuristicManhattan(), new HeuristicChebyshev(), new HeuristicEuclidean(), new HeuristicSquared()};
+        return new HeuristicScheme[] {new HeuristicManhattan(), new HeuristicChebyshev(), new HeuristicDiagonal(), new HeuristicEuclidean(), new HeuristicSquared()};
     }
 }
