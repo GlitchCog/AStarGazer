@@ -62,9 +62,13 @@ Heuristics - Select which heuristic to use, meaning how the distance between
                 It's so named because in a city you're bound to the streets. 
                 You can't cut diagonally through a building to go north/south 
                 one block and east/west one block.
-    Chebyshev - Chebyshev distance considers a diagonal move on a grid equal to 
-                a move along an axis. This heuristic should be paired with the 
-                8-directional neighbor selection scheme.
+    Chebyshev - Chebyshev distance considers the movement on both axis
+    		    and takes the maximum between the two differences. This 
+    		    heuristic can be paired with the 8-directional neighbor.<br /> 
+    		    To visualize the usefulness of this heuristic imagine a
+    		    claw machine. While you're moving in one direction you can  
+    		    simultaneously move in the other direction at no cost in time 
+    		    (unless you move more in this direction, which makes this the max).
                 Sometimes in poorly programmed video games you notice that your 
                 character can move faster on the diagonal. This is because the 
                 motion is working in Chebyshev-space, but the world map you're 
@@ -79,6 +83,10 @@ Heuristics - Select which heuristic to use, meaning how the distance between
                 space these movements are considered equal, and the discrepancy 
                 between the Euclidean space of the game world and the Chebyshev 
                 space of the poorly chosen input scheme betray this. 
+    Diagonal -  Diagonal distance is a perfect pair with the 8-directional 
+    		    neighbor selection scheme. It performs a perfect measure in  
+    		    distance when movement is restricted entirely to horizontal,  
+    		    vertical, and diagonal motion.
     Euclidean - This is normal distance calculated by the Pythagorean formula: 
                 d = sqrt((a_x-b_x)^2+(a_y-b_y)^2)
     Euclidean Squared - This heuristic is an optimized version of the 
