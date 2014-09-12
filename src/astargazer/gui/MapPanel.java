@@ -127,11 +127,28 @@ public class MapPanel extends JPanel implements MouseInputListener, ComponentLis
 
         setColorScheme(colorScheme);
 
-        updateStatusBar();
+        if (isInteractive())
+        {
+            updateStatusBar();
+            addMouseMotionListener(this);
+            addMouseListener(this);
+        }
+        else
+        {
+            centerMap();
+        }
 
         addComponentListener(this);
-        addMouseMotionListener(this);
-        addMouseListener(this);
+    }
+
+    /**
+     * Returns whether the mouse can be used to modify the panel contents (Used for the example map on the custom color preference popup)
+     * 
+     * @return interactive
+     */
+    public boolean isInteractive()
+    {
+        return sb != null;
     }
 
     /**
@@ -146,7 +163,7 @@ public class MapPanel extends JPanel implements MouseInputListener, ComponentLis
     /**
      * Get the offset distance for the labels on the axes
      * 
-     * @return
+     * @return axisLabelOffset
      */
     private int getAxisLabelOffset()
     {
@@ -219,7 +236,7 @@ public class MapPanel extends JPanel implements MouseInputListener, ComponentLis
     @Override
     public void paint(Graphics g)
     {
-        g.setColor(colorScheme.getBackground());
+        g.setColor(colorScheme.get(ColorScheme.COLOR_BACKGROUND));
         g.fillRect(0, 0, getWidth(), getHeight());
 
         if (pf == null)
@@ -251,14 +268,14 @@ public class MapPanel extends JPanel implements MouseInputListener, ComponentLis
             paintPath(g2d, x, y);
         }
 
-        drawPoint(g2d, pf.getStart(), colorScheme.getStart(), x, y, true);
-        drawPoint(g2d, pf.getStart(), colorScheme.getStartBorder(), x, y, false);
-        drawPoint(g2d, pf.getGoal(), colorScheme.getGoal(), x, y, true);
-        drawPoint(g2d, pf.getGoal(), colorScheme.getGoalBorder(), x, y, false);
+        drawPoint(g2d, pf.getStart(), colorScheme.get(ColorScheme.COLOR_START), x, y, true);
+        drawPoint(g2d, pf.getStart(), colorScheme.get(ColorScheme.COLOR_START_BORDER), x, y, false);
+        drawPoint(g2d, pf.getGoal(), colorScheme.get(ColorScheme.COLOR_GOAL), x, y, true);
+        drawPoint(g2d, pf.getGoal(), colorScheme.get(ColorScheme.COLOR_GOAL_BORDER), x, y, false);
 
         if (pf.getCursor() != null)
         {
-            drawPoint(g2d, pf.getCursor(), colorScheme.getCursor(), x, y, false);
+            drawPoint(g2d, pf.getCursor(), colorScheme.get(ColorScheme.COLOR_CURSOR), x, y, false);
         }
     }
 
@@ -271,7 +288,7 @@ public class MapPanel extends JPanel implements MouseInputListener, ComponentLis
      */
     private void paintGrid(Graphics g, int x, int y)
     {
-        g.setColor(colorScheme.getGrid());
+        g.setColor(colorScheme.get(ColorScheme.COLOR_GRID));
         for (int row = 0; row < pf.getMap().getRows(); row++)
         {
             for (int col = 0; col < pf.getMap().getCols(); col++)
@@ -294,11 +311,11 @@ public class MapPanel extends JPanel implements MouseInputListener, ComponentLis
         List<WeightedPoint> openSet = pf.getOpenSet().getList();
         for (WeightedPoint wp : openSet)
         {
-            fillTile(g2d, wp, colorScheme.getOpen(), colorScheme.getOpenBorder(), x, y);
+            fillTile(g2d, wp, colorScheme.get(ColorScheme.COLOR_OPEN), colorScheme.get(ColorScheme.COLOR_OPEN_BORDER), x, y);
         }
         for (WeightedPoint wp : pf.getClosedSet())
         {
-            fillTile(g2d, wp, colorScheme.getClosed(), colorScheme.getClosedBorder(), x, y);
+            fillTile(g2d, wp, colorScheme.get(ColorScheme.COLOR_CLOSED), colorScheme.get(ColorScheme.COLOR_CLOSED_BORDER), x, y);
         }
     }
 
@@ -323,7 +340,7 @@ public class MapPanel extends JPanel implements MouseInputListener, ComponentLis
                 }
             }
         }
-        g.setColor(colorScheme.getGrid()); // Draw outer border
+        g.setColor(colorScheme.get(ColorScheme.COLOR_GRID)); // Draw outer border
         g.drawRect(x, y, pf.getMap().getCols() * tileWidth + getAxisLabelOffset(), pf.getMap().getRows() * tileHeight + getAxisLabelOffset());
     }
 
@@ -344,7 +361,7 @@ public class MapPanel extends JPanel implements MouseInputListener, ComponentLis
 
         for (int row = 0; row < map.getRows(); row++)
         {
-            g2d.setColor(colorScheme.getText());
+            g2d.setColor(colorScheme.get(ColorScheme.COLOR_TEXT));
             String str = "" + Integer.toString(row);
             while (str.length() < 2) str = '0' + str;
             g2d.drawString(str, x + (getAxisLabelOffset() - g2d.getFontMetrics().charsWidth(str.toCharArray(), 0, str.length())) / 2, 
@@ -353,7 +370,7 @@ public class MapPanel extends JPanel implements MouseInputListener, ComponentLis
             {
                 if (row == 0)
                 {
-                    g2d.setColor(colorScheme.getText());
+                    g2d.setColor(colorScheme.get(ColorScheme.COLOR_TEXT));
                     str = "" + Integer.toString(col);
                     while (str.length() < 2) str = '0' + str;
                     g2d.drawString(str, x + getAxisLabelOffset() + col * tileWidth + (tileWidth - g2d.getFontMetrics().charsWidth(str.toCharArray(), 0, str.length())) / 2, 
@@ -375,7 +392,7 @@ public class MapPanel extends JPanel implements MouseInputListener, ComponentLis
     {
         List<WeightedPoint> path = pf.getPath(pf.getCursor());
         WeightedPoint prev = null;
-        g2d.setColor(colorScheme.getPath());
+        g2d.setColor(colorScheme.get(ColorScheme.COLOR_PATH));
         for (WeightedPoint wp : path)
         {
             if (prev != null)
@@ -428,16 +445,16 @@ public class MapPanel extends JPanel implements MouseInputListener, ComponentLis
         int dy = y + row * tileHeight + getAxisLabelOffset() + inset;
         int dw = tileWidth - inset * 2;
         int dh = tileHeight - inset * 2;
-        g.setColor(colorScheme.getBlock());
+        g.setColor(colorScheme.get(ColorScheme.COLOR_BLOCK));
         g.fillRect(dx, dy, dw, dh);
 
-        g.setColor(colorScheme.getBlockShadow());
+        g.setColor(colorScheme.get(ColorScheme.COLOR_BLOCK_SHADOW));
         for (int i = 0; i < Math.max(tileHeight / 6, 1); i++)
             g.drawLine(dx, dy + dh - i, dx + dw - 1 - i, dy + dh - i);
         for (int i = 0; i < Math.max(tileWidth / 6, 1); i++)
             g.drawLine(dx + dw - i, dy, dx + dw - i, dy + dh - 1 - i);
 
-        g.setColor(colorScheme.getBlockHighlight());
+        g.setColor(colorScheme.get(ColorScheme.COLOR_BLOCK_HIGHLIGHT));
         for (int i = 0; i < Math.max(tileHeight / 6, 1); i++)
             g.drawLine(dx, dy + i, dx + dw - 1 - i, dy + i);
         for (int i = 0; i < Math.max(tileWidth / 6, 1); i++)
@@ -611,7 +628,14 @@ public class MapPanel extends JPanel implements MouseInputListener, ComponentLis
     @Override
     public void componentResized(ComponentEvent e)
     {
-        enforceBoundaries();
+        if (isInteractive())
+        {
+            enforceBoundaries();
+        }
+        else
+        {
+            centerMap();
+        }
     }
 
     @Override

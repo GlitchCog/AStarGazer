@@ -1,14 +1,49 @@
 package astargazer.gui;
 
 import java.awt.Color;
+import java.util.HashMap;
 
 /**
  * Color schemes for displaying the MapPanel
  * 
  * @author myanos
  */
-public class ColorScheme
+public class ColorScheme extends HashMap<String, Color>
 {
+    public static final String COLOR_BACKGROUND = "Background";
+    public static final String COLOR_BLOCK_HIGHLIGHT = "Block Highlight";
+    public static final String COLOR_BLOCK = "Block";
+    public static final String COLOR_BLOCK_SHADOW = "Block Shadow";
+    public static final String COLOR_CURSOR = "Cursor";
+    public static final String COLOR_OPEN = "Open";
+    public static final String COLOR_OPEN_BORDER = "Open Border";
+    public static final String COLOR_CLOSED = "Closed";
+    public static final String COLOR_CLOSED_BORDER = "Closed Border";
+    public static final String COLOR_TEXT = "Text";
+    public static final String COLOR_GRID = "Grid";
+    public static final String COLOR_PATH = "Path";
+    public static final String COLOR_START = "Start";
+    public static final String COLOR_START_BORDER = "Start Border";
+    public static final String COLOR_GOAL = "Goal";
+    public static final String COLOR_GOAL_BORDER = "Goal Border";
+
+    public static final String[] COLOR_LABELS = new String[] { COLOR_BACKGROUND, 
+                                                               COLOR_BLOCK_HIGHLIGHT, 
+                                                               COLOR_BLOCK, 
+                                                               COLOR_BLOCK_SHADOW, 
+                                                               COLOR_CURSOR, 
+                                                               COLOR_OPEN, 
+                                                               COLOR_OPEN_BORDER, 
+                                                               COLOR_CLOSED, 
+                                                               COLOR_CLOSED_BORDER, 
+                                                               COLOR_TEXT, 
+                                                               COLOR_GRID, 
+                                                               COLOR_PATH, 
+                                                               COLOR_START, 
+                                                               COLOR_START_BORDER, 
+                                                               COLOR_GOAL, 
+                                                               COLOR_GOAL_BORDER };
+
     public static final ColorScheme DEFAULT_SCHEME = new ColorScheme("Default", 
                                                                      Color.WHITE,                  // background
                                                                      Color.LIGHT_GRAY,             // blockHighlight
@@ -155,31 +190,9 @@ public class ColorScheme
 
     public static final ColorScheme CUSTOM_SCHEME = new ColorScheme("Custom", DEFAULT_SCHEME);
 
-    public static final ColorScheme[] SCHEMES = {DEFAULT_SCHEME, INVERTED_SCHEME, GRASS_SCHEME, WATER_SCHEME, FIRE_SCHEME, ICE_SCHEME, TRON_SCHEME, GRAYSCALE_SCHEME};
+    public static final ColorScheme[] SCHEMES = {DEFAULT_SCHEME, INVERTED_SCHEME, GRASS_SCHEME, WATER_SCHEME, FIRE_SCHEME, ICE_SCHEME, TRON_SCHEME, GRAYSCALE_SCHEME, CUSTOM_SCHEME};
 
     public final String name;
-
-    private Color background;
-
-    private Color blockHighlight;
-    private Color block;
-    private Color blockShadow;
-
-    private Color cursor;
-
-    private Color open;
-    private Color openBorder;
-    private Color closed;
-    private Color closedBorder;
-
-    private Color text;
-    private Color grid;
-    private Color path;
-
-    private Color start;
-    private Color startBorder;
-    private Color goal;
-    private Color goalBorder;
 
     private ColorScheme(String name, 
                         Color background, 
@@ -200,55 +213,48 @@ public class ColorScheme
                         Color goalBorder)
     {
         this.name = name;
+        setColors(background, blockHighlight, block, blockShadow, cursor, open, openBorder, closed, closedBorder, text, grid, path, start, startBorder, goal, goalBorder);
+    }
 
-        this.background = background;
-
-        this.blockHighlight = blockHighlight;
-        this.block = block;
-        this.blockShadow = blockShadow;
-
-        this.cursor = cursor;
-
-        this.open = open;
-        this.openBorder = openBorder;
-        this.closed = closed;
-        this.closedBorder = closedBorder;
-
-        this.text = text;
-        this.grid = grid;
-
-        this.path = path;
-        this.start = start;
-        this.startBorder = startBorder;
-        this.goal = goal;
-        this.goalBorder = goalBorder;
+    public void setColors(Color background, 
+                          Color blockHighlight, 
+                          Color block, 
+                          Color blockShadow, 
+                          Color cursor, 
+                          Color open, 
+                          Color openBorder, 
+                          Color closed, 
+                          Color closedBorder, 
+                          Color text, 
+                          Color grid, 
+                          Color path, 
+                          Color start, 
+                          Color startBorder, 
+                          Color goal, 
+                          Color goalBorder)
+    {
+        put(COLOR_BACKGROUND, background);
+        put(COLOR_BLOCK_HIGHLIGHT, blockHighlight);
+        put(COLOR_BLOCK, block);
+        put(COLOR_BLOCK_SHADOW, blockShadow);
+        put(COLOR_CURSOR, cursor);
+        put(COLOR_OPEN, open);
+        put(COLOR_OPEN_BORDER, openBorder);
+        put(COLOR_CLOSED, closed);
+        put(COLOR_CLOSED_BORDER, closedBorder);
+        put(COLOR_TEXT, text);
+        put(COLOR_GRID, grid);
+        put(COLOR_PATH, path);
+        put(COLOR_START, start);
+        put(COLOR_START_BORDER, startBorder);
+        put(COLOR_GOAL, goal);
+        put(COLOR_GOAL_BORDER, goalBorder);
     }
 
     public ColorScheme(String name, ColorScheme copy)
     {
         this.name = name;
-
-        this.background = copy.background;
-
-        this.blockHighlight = copy.blockHighlight;
-        this.block = copy.block;
-        this.blockShadow = copy.blockShadow;
-
-        this.cursor = copy.cursor;
-
-        this.open = copy.open;
-        this.openBorder = copy.openBorder;
-        this.closed = copy.closed;
-        this.closedBorder = copy.closedBorder;
-
-        this.text = copy.text;
-        this.grid = copy.grid;
-
-        this.path = copy.path;
-        this.start = copy.start;
-        this.startBorder = copy.startBorder;
-        this.goal = copy.goal;
-        this.goalBorder = copy.goalBorder;
+        setColors(copy);
     }
 
     public String toString()
@@ -256,84 +262,58 @@ public class ColorScheme
         return name;
     }
 
-    public Color getBackground()
+    public void setColors(ColorScheme copy)
     {
-        return background;
+        put(COLOR_BACKGROUND, copy.get(COLOR_BACKGROUND));
+        put(COLOR_BLOCK_HIGHLIGHT, copy.get(COLOR_BLOCK_HIGHLIGHT));
+        put(COLOR_BLOCK, copy.get(COLOR_BLOCK));
+        put(COLOR_BLOCK_SHADOW, copy.get(COLOR_BLOCK_SHADOW));
+        put(COLOR_CURSOR, copy.get(COLOR_CURSOR));
+        put(COLOR_OPEN, copy.get(COLOR_OPEN));
+        put(COLOR_OPEN_BORDER, copy.get(COLOR_OPEN_BORDER));
+        put(COLOR_CLOSED, copy.get(COLOR_CLOSED));
+        put(COLOR_CLOSED_BORDER, copy.get(COLOR_CLOSED_BORDER));
+        put(COLOR_TEXT, copy.get(COLOR_TEXT));
+        put(COLOR_GRID, copy.get(COLOR_GRID));
+        put(COLOR_PATH, copy.get(COLOR_PATH));
+        put(COLOR_START, copy.get(COLOR_START));
+        put(COLOR_START_BORDER, copy.get(COLOR_START_BORDER));
+        put(COLOR_GOAL, copy.get(COLOR_GOAL));
+        put(COLOR_GOAL_BORDER, copy.get(COLOR_GOAL_BORDER));
     }
 
-    public Color getBlockHighlight()
+    public void setColor(String name, Color color)
     {
-        return blockHighlight;
+        put(name, color);
     }
 
-    public Color getBlock()
+    @Override
+    public int hashCode()
     {
-        return block;
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((name == null) ? 0 : name.hashCode());
+        return result;
     }
 
-    public Color getBlockShadow()
+    @Override
+    public boolean equals(Object obj)
     {
-        return blockShadow;
-    }
-
-    public Color getCursor()
-    {
-        return cursor;
-    }
-
-    public Color getOpen()
-    {
-        return open;
-    }
-
-    public Color getOpenBorder()
-    {
-        return openBorder;
-    }
-
-    public Color getClosed()
-    {
-        return closed;
-    }
-
-    public Color getClosedBorder()
-    {
-        return closedBorder;
-    }
-
-    public Color getText()
-    {
-        return text;
-    }
-
-    public Color getGrid()
-    {
-        return grid;
-    }
-
-    public Color getPath()
-    {
-        return path;
-    }
-
-    public Color getStart()
-    {
-       return start;
-    }
-
-    public Color getStartBorder()
-    {
-        return startBorder;
-    }
-
-    public Color getGoal()
-    {
-        return goal;
-    }
-
-    public Color getGoalBorder()
-    {
-        return goalBorder;
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        ColorScheme other = (ColorScheme)obj;
+        if (name == null)
+        {
+            if (other.name != null)
+                return false;
+        }
+        else if (!name.equals(other.name))
+            return false;
+        return true;
     }
 
 }

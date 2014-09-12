@@ -28,6 +28,11 @@ public class Window extends JFrame
     private HelpPopup helpPopup;
 
     /**
+     * Popup window that displays options and permits the user to update them
+     */
+    private PreferencesPopup preferencesPopup;
+
+    /**
      * Panel of tools that is displayed on the left side of this window
      */
     private ToolboxPanel toolPanel;
@@ -86,6 +91,8 @@ public class Window extends JFrame
         mapPanel = new MapPanel(pathFinder, statusBar);
 
         toolPanel = new ToolboxPanel(mapPanel, pathFinder);
+
+        preferencesPopup = new PreferencesPopup(this, toolPanel);
 
         JPanel rightPanel = new JPanel(new GridBagLayout());
 
@@ -161,5 +168,10 @@ public class Window extends JFrame
     public void showAbout()
     {
         helpPopup.showAbout(this);
+    }
+
+    public void showPreferences()
+    {
+        preferencesPopup.setVisible(true);
     }
 }

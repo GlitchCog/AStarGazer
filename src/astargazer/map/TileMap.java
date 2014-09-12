@@ -38,6 +38,9 @@ public class TileMap
      * Construct a TileMap with the specified boolean map of TRUE non-traversable tiles
      * 
      * @param map
+     * @param start
+     * @param goal
+     * @param seed
      */
     public TileMap(boolean[][] map, WeightedPoint start, WeightedPoint goal, int seed)
     {
@@ -48,14 +51,26 @@ public class TileMap
     }
 
     /**
+     * Construct a TileMap with the specified int map where 0 is a traversable tile, all other numbers are non-traversable tiles
+     * 
+     * @param map
+     * @param start
+     * @param goal
+     * @param seed
+     */
+    public TileMap(int[][] map, WeightedPoint start, WeightedPoint goal, int seed)
+    {
+        this(convertIntMap(map), start, goal, seed);
+    }
+
+    /**
      * Construct a TileMap with the specified int map where all non-zero numbers are non-traversable tiles
      * 
      * @param imap
      */
-    public TileMap(int[][] imap, int seed)
+    public static boolean[][] convertIntMap(int[][] imap)
     {
-        this.seed = seed;
-        map = new boolean[imap.length][imap[0].length];
+        boolean[][] map = new boolean[imap.length][imap[0].length];
         for (int r = 0; r < imap.length; r++)
         {
             for (int c = 0; c < imap[r].length; c++)
@@ -63,6 +78,7 @@ public class TileMap
                 map[r][c] = imap[r][c] != 0;
             }
         }
+        return map;
     }
 
     /**

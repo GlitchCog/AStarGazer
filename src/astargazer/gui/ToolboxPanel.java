@@ -76,29 +76,15 @@ public class ToolboxPanel extends JPanel
     private Timer solveTimer;
 
     /**
-     * The panel of buttons
-     */
-    private ButtonPanel buttonPanel;
-
-    /**
-     * The panel of dropdown menus
-     */
-    private DropdownPanel dropdownPanel;
-
-    /**
-     * The panel of sliders
-     */
-    private SliderPanel sliderPanel;
-
-    /**
-     * The panel of checkboxes
-     */
-    private CheckboxPanel checkboxPanel;
-
-    /**
      * The panel for displaying information about the algorithm
      */
     private InfoPanel infoPanel;
+
+    /**
+     * Reference to the color scheme selector dropdown menu, used by the preferences popup to set the color scheme to
+     * custom on save
+     */
+    private Dropdown colorSchemeDropdown;
 
     /**
      * Construct a ToolboxPanel for the specified MapPanel and PathFinder
@@ -157,11 +143,11 @@ public class ToolboxPanel extends JPanel
             }
         };
 
-        buttonPanel = new ButtonPanel(new String[] {BUTTON_TEXT_STEP, 
-                                                    BUTTON_TEXT_SOLVE, 
-                                                    BUTTON_TEXT_RESET,
-                                                    BUTTON_TEXT_GENERATE}, 
-                                      al);
+        ButtonPanel buttonPanel = new ButtonPanel(new String[] {BUTTON_TEXT_STEP, 
+                                                                BUTTON_TEXT_SOLVE, 
+                                                                BUTTON_TEXT_RESET,
+                                                                BUTTON_TEXT_GENERATE}, 
+                                                                al);
 
         solveTimer = new Timer(2, new ActionListener(){
             public void actionPerformed( ActionEvent e )
@@ -202,12 +188,14 @@ public class ToolboxPanel extends JPanel
             }
         };
 
+        colorSchemeDropdown = new Dropdown(DROPDOWN_TEXT_COLORS, ColorScheme.SCHEMES);
+
         dropdowns[0] = new Dropdown(DROPDOWN_TEXT_HEURISTICS, HeuristicScheme.getAllHeuristics() );
         dropdowns[1] = new Dropdown(DROPDOWN_TEXT_NEIGHBORS, NeighborSelector.getAllNeighborSelectors() );
-        dropdowns[2] = new Dropdown(DROPDOWN_TEXT_COLORS, ColorScheme.SCHEMES);
+        dropdowns[2] = colorSchemeDropdown;
         dropdowns[3] = new Dropdown(DROPDOWN_TEXT_OBSTACLES, MapGenerator.getAllGenerators() );
 
-        dropdownPanel = new DropdownPanel(dropdowns, dal);
+        DropdownPanel dropdownPanel = new DropdownPanel(dropdowns, dal);
 
         pf.setHeuristic((HeuristicScheme)(dropdownPanel.getDropdowns()[0].getSelectedItem()));
         pf.setNeighborSelector((NeighborSelector)(dropdownPanel.getDropdowns()[1].getSelectedItem()));
@@ -239,7 +227,7 @@ public class ToolboxPanel extends JPanel
         setSolveDelay(sliders[0].getValue());
         mp.setTileSize(sliders[1].getValue());
 
-        sliderPanel = new SliderPanel(sliders, cl);
+        SliderPanel sliderPanel = new SliderPanel(sliders, cl);
 
         ItemListener il = new ItemListener() {
             @Override
@@ -267,11 +255,11 @@ public class ToolboxPanel extends JPanel
             }
         };
 
-        checkboxPanel = new CheckboxPanel(new String[] {CHECKBOX_TEXT_DIJKSTRA, 
-                                                        CHECKBOX_TEXT_RANDOMIZE, 
-                                                        CHECKBOX_TEXT_GRID, 
-                                                        CHECKBOX_TEXT_SWAP}, 
-                                                        il);
+        CheckboxPanel checkboxPanel = new CheckboxPanel(new String[] {CHECKBOX_TEXT_DIJKSTRA, 
+                                                                      CHECKBOX_TEXT_RANDOMIZE, 
+                                                                      CHECKBOX_TEXT_GRID, 
+                                                                      CHECKBOX_TEXT_SWAP}, 
+                                                                      il);
 
         infoPanel = new InfoPanel(pf);
 
@@ -288,7 +276,6 @@ public class ToolboxPanel extends JPanel
         gbc.gridy++;
         gbc.weighty = 1.0f;
         add(infoPanel, gbc);
-
     }
 
     /**
@@ -338,6 +325,16 @@ public class ToolboxPanel extends JPanel
         {
             zoomSlider.setValue(newValue);
         }
+    }
+
+    /**
+     * Set the color scheme dropdown menu selection
+     * 
+     * @param scheme
+     */
+    public void setColorScheme(ColorScheme scheme)
+    {
+        colorSchemeDropdown.setSelectedItem(scheme);
     }
 
 }

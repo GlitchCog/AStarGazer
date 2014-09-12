@@ -17,11 +17,12 @@ public class Menu extends JMenuBar
 {
     private Window window;
 
-    private static final String[] MAIN_MENU_ITEMS = {"File", "Help"};
-    private static final int[] MAIN_MNOMONICS = {KeyEvent.VK_F, KeyEvent.VK_H};
+    private static final String[] MAIN_MENU_ITEMS = {"File", "Edit", "Help"};
+    private static final int[] MAIN_MNOMONICS = {KeyEvent.VK_F, KeyEvent.VK_E, KeyEvent.VK_H};
 
     private static final String MENU_SEED = "Seed Map Generator";
     private static final String MENU_EXIT = "Exit";
+    private static final String MENU_PREFERENCES = "Preferences";
     private static final String MENU_INFO = "Information";
     private static final String MENU_ABOUT = "About";
 
@@ -29,6 +30,7 @@ public class Menu extends JMenuBar
     {
         { new MenuComponents(MENU_SEED,  KeyEvent.VK_S, KeyStroke.getKeyStroke(KeyEvent.VK_S, Event.CTRL_MASK)), 
           new MenuComponents(MENU_EXIT,  KeyEvent.VK_X, KeyStroke.getKeyStroke(KeyEvent.VK_Q, Event.CTRL_MASK)) }, 
+        { new MenuComponents(MENU_PREFERENCES, KeyEvent.VK_P, KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, Event.ALT_MASK)) }, 
         { new MenuComponents(MENU_INFO,  KeyEvent.VK_I, null),
           new MenuComponents(MENU_ABOUT, KeyEvent.VK_A, null) 
         }
@@ -59,6 +61,10 @@ public class Menu extends JMenuBar
             else if (MENU_EXIT.equals( ((JMenuItem)e.getSource()).getText() ))
             {
                 System.exit(0);
+            }
+            else if (MENU_PREFERENCES.equals( ((JMenuItem)e.getSource()).getText() ))
+            {
+                window.showPreferences();
             }
             else if (MENU_INFO.equals( ((JMenuItem)e.getSource()).getText() ))
             {
