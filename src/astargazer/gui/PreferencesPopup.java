@@ -176,7 +176,10 @@ public class PreferencesPopup extends JDialog
         PathFinder examplePathFinder = new PathFinder(exampleMap);
         examplePathFinder.setHeuristic(new HeuristicEuclidean());
         examplePathFinder.setNeighborSelector(new NeighborEightDirections());
-        examplePathFinder.solve();
+        for (int i = 0; i < 12; i++)
+        {
+            examplePathFinder.step();
+        }
         example = new MapPanel(examplePathFinder, null);
         example.setDisplayGrid(true);
         example.setTileSize(32);
