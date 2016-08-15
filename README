@@ -62,9 +62,9 @@ Heuristics - Select which heuristic to use, meaning how the distance between
                 It's so named because in a city you're bound to the streets. 
                 You can't cut diagonally through a building to go north/south 
                 one block and east/west one block.
-    Chebyshev - Chebyshev distance considers the movement on both axis
+    Chebyshev - Chebyshev distance considers the movement on both axes
                 and takes the maximum between the two differences. This 
-                heuristic can be paired with the 8-directional neighbor.<br /> 
+                heuristic can be paired with the 8-directional neighbor. 
                 To visualize the usefulness of this heuristic imagine a
                 claw machine. While you're moving in one direction you can  
                 simultaneously move in the other direction at no cost in time 
